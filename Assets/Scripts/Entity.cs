@@ -2,9 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Entity : MonoBehaviour
+public class Entity
 {
+    //Health
+    public int maxHealth;
+    public int currentHealth;
 
+    //Stamina
+    public float maxStamina;
+    public float currentStamina;
+    public float StaminaPerSec;
+
+    //Attack
+    public int attackPower;
+
+    //Defence
+    public int defence;
+
+    //Poise
+    public float poise;
 
 	void Start ()
 	{
