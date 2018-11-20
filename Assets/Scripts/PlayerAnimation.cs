@@ -17,13 +17,10 @@ public class PlayerAnimation : MonoBehaviour
 
 	void Update () 
 	{
-        if (movement.input.magnitude != 0)
-        {
-            anim.SetBool("moving", true);
-        }
-        else
-        {
-            anim.SetBool("moving", false);
-        }
-	}
+        anim.SetFloat("airVelocityY", movement.VelocityY);
+        anim.SetBool("onGround", GetComponent<CharacterController>().isGrounded);
+
+        float animationSpeedPercent = ((movement.Dashing) ? 1 : 0.5f) * movement.InputDir.magnitude;
+        anim.SetFloat("speedPercent", animationSpeedPercent, movement.SpeedSmoothTime, Time.deltaTime);
+    }
 }
