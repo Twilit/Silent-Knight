@@ -16,6 +16,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     float moveSpeed = 5.0f;
 
+    [SerializeField]
+    float turnSmoothTime = 0.2f;
+    float turnSmoothVelocity;
+
     public Vector2 input;
 
 	void Start ()
@@ -30,9 +34,27 @@ public class PlayerMovement : MonoBehaviour
 
         if (inputDir != Vector2.zero)
         {
-            transform.eulerAngles = Vector3.up * Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg;
-        }
+            float targetRotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg;
+            print("tr " + targetRotation);
+            print("eul " + transform.eulerAngles.y);
 
+            int smoothedAngle = 120;
+
+            if ((((Mathf.Sign(targetRotation) == -1) ? (targetRotation + 360) : targetRotation) > (((Mathf.Sign(transform.eulerAngles.y + smoothedAngle) == -1) ? (transform.eulerAngles.y + smoothedAngle + 360) : transform.eulerAngles.y + smoothedAngle)) ||
+                (((Mathf.Sign(targetRotation) == -1) ? (targetRotation + 360) : targetRotation) < (((Mathf.Sign(transform.eulerAngles.y - smoothedAngle) == -1) ? (transform.eulerAngles.y - smoothedAngle - 360) : transform.eulerAngles.y - smoothedAngle)))))
+            {
+                transform.eulerAngles = Vector3.up * targetRotation;
+            }
+            else
+            {
+                transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, turnSmoothTime);
+            }
+
+            //transform.eulerAngles = Vector3.up * targetRotation;
+
+            //transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, turnSmoothTime);
+        }
+        
         if (charController.isGrounded)
         {
             if (Input.GetButtonDown("Jump"))
@@ -44,14 +66,8 @@ public class PlayerMovement : MonoBehaviour
         {
             yVelocity -= gravity;
         }
-
+        
         Vector3 velocity = transform.forward * moveSpeed * inputDir.magnitude + Vector3.up * yVelocity;
-
-        //velocity.y = yVelocity;
-
-        //velocity = transform.TransformDirection(velocity);
-
-        //transform.eulerAngles = new Vector3(0, velocity.magnitude,0);
 
         charController.Move(velocity * Time.deltaTime);
 	}
