@@ -144,7 +144,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (charController.isGrounded)
         {
-            velocityY = -1;
+            velocityY = -3;
         }
         else
         {
