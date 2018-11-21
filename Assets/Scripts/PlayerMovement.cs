@@ -11,6 +11,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     float gravity = -1.0f;
 
+    float fallMultiplier = 1;
+    bool stepOffLedge;
+
     [SerializeField]
     float moveSpeed = 5.0f;
     [SerializeField]
@@ -65,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
 	void Start ()
 	{
         charController = GetComponent<CharacterController>();
-	}
+    }
 	
 	void Update ()
 	{
@@ -124,6 +127,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (charController.isGrounded)
         {
+            stepOffLedge = false;
+
             float jumpVelocity = Mathf.Sqrt(-2 * gravity * jumpHeight);
             velocityY = jumpVelocity;
         }
@@ -131,11 +136,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Gravity()
     {
-        float fallMultiplier = 1;
-
-        if (velocityY < 0)
+        if (velocityY < 0 && !charController.isGrounded)
         {
-            fallMultiplier = 2.5f;
+            fallMultiplier = 3f;
         }
         else
         {
@@ -145,6 +148,12 @@ public class PlayerMovement : MonoBehaviour
         if (charController.isGrounded)
         {
             velocityY = -3;
+            stepOffLedge = true;
+        }
+        else if (!charController.isGrounded && stepOffLedge)
+        {
+            velocityY = 0;
+            stepOffLedge = false;
         }
         else
         {
