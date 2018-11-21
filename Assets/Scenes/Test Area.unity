@@ -1094,7 +1094,7 @@ MonoBehaviour:
   gravity: -12
   moveSpeed: 4
   dashSpeed: 6
-  speedSmoothTime: 0.07
+  speedSmoothTime: 0.08
 --- !u!114 &1232394857
 MonoBehaviour:
   m_ObjectHideFlags: 0
