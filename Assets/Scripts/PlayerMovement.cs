@@ -147,7 +147,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (charController.isGrounded)
         {
-            velocityY = -3;
+            velocityY = -10;
             stepOffLedge = true;
         }
         else if (!charController.isGrounded && stepOffLedge)
