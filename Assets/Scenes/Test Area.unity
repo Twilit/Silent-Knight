@@ -720,7 +720,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400068, guid: 3b7718f67979ce648b2fa23ca4c5f372, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 400068, guid: 3b7718f67979ce648b2fa23ca4c5f372, type: 3}
       propertyPath: m_LocalRotation.w
@@ -757,6 +757,10 @@ Prefab:
     - target: {fileID: 400068, guid: 3b7718f67979ce648b2fa23ca4c5f372, type: 3}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100068, guid: 3b7718f67979ce648b2fa23ca4c5f372, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b7718f67979ce648b2fa23ca4c5f372, type: 3}
