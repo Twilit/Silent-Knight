@@ -10,6 +10,10 @@ public class PlayerMovement : MonoBehaviour
     float jumpHeight = 5.0f;
     [SerializeField]
     float gravity = -1.0f;
+    [Range(0, 1), SerializeField]
+    float airControlPercent;
+    [Range(0, 1), SerializeField]
+    float dashControlPercent;
 
     float fallMultiplier = 1;
     bool stepOffLedge;
@@ -94,7 +98,7 @@ public class PlayerMovement : MonoBehaviour
             float targetRotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg;
 
             //int smoothedAngle = 120;
-            float turnSmoothTime = ((dashing) ? 0.5f : 0.15f);
+            float turnSmoothTime = 0.15f;
 
             /*if ((((Mathf.Sign(targetRotation) == -1) ? (targetRotation + 360) : targetRotation) > (((Mathf.Sign(transform.eulerAngles.y + smoothedAngle) == -1) ? (transform.eulerAngles.y + smoothedAngle + 360) : transform.eulerAngles.y + smoothedAngle)) ||
                 (((Mathf.Sign(targetRotation) == -1) ? (targetRotation + 360) : targetRotation) < (((Mathf.Sign(transform.eulerAngles.y - smoothedAngle) == -1) ? (transform.eulerAngles.y - smoothedAngle - 360) : transform.eulerAngles.y - smoothedAngle)))))*/
@@ -105,7 +109,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, turnSmoothTime);
+                transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, GetModifiedSmoothTime(turnSmoothTime));
             }
 
             justStartedMoving = false;
@@ -116,7 +120,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         float targetSpeed = ((dashing) ? dashSpeed : moveSpeed) * inputDir.magnitude;
-        currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedSmoothVelocity, speedSmoothTime);
+        currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedSmoothVelocity, GetModifiedSmoothTime(speedSmoothTime));
 
         Vector3 velocity = transform.forward * currentSpeed + Vector3.up * velocityY;
 
@@ -159,5 +163,32 @@ public class PlayerMovement : MonoBehaviour
         {
             velocityY += gravity * fallMultiplier * Time.deltaTime;
         }
+    }
+
+    float GetModifiedSmoothTime(float smoothTime)
+    {
+        if (charController.isGrounded)
+        {
+            if (!dashing)
+            {
+                return smoothTime;
+            }
+            else
+            {
+                if (dashControlPercent == 0)
+                {
+                    return float.MaxValue;
+                }
+
+                return smoothTime / dashControlPercent;
+            }            
+        }
+
+        if (airControlPercent == 0)
+        {
+            return float.MaxValue;
+        }
+
+        return smoothTime / airControlPercent;
     }
 }
