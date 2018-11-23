@@ -19,13 +19,48 @@ public class PlayerMovement : MonoBehaviour
     bool stepOffLedge;
 
     [SerializeField]
-    float moveSpeed = 5.0f;
+    float moveSpeed = 4.0f;
+
+    public float MoveSpeed
+    {
+        get
+        {
+            return moveSpeed;
+        }
+    }
+
     [SerializeField]
-    float dashSpeed = 8.0f;
+    float dashSpeed = 6.0f;
+
+    public float DashSpeed
+    {
+        get
+        {
+            return dashSpeed;
+        }
+    }
+
     [SerializeField]
     float speedSmoothTime = 0.1f;
+
+    public float SpeedSmoothTime
+    {
+        get
+        {
+            return speedSmoothTime;
+        }
+    }
+
     float speedSmoothVelocity;
     float currentSpeed;
+    
+    public float CurrentSpeed
+    {
+        get
+        {
+            return currentSpeed;
+        }
+    }
 
     private float velocityY;
 
@@ -34,14 +69,6 @@ public class PlayerMovement : MonoBehaviour
         get
         {
             return velocityY;
-        }
-    }
-
-    public float SpeedSmoothTime
-    {
-        get
-        {
-            return speedSmoothTime;
         }
     }
 
@@ -91,7 +118,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Movement(Vector2 inputDir)
     {
-        dashing = Input.GetButton("Run");
+        Dash();
 
         if (inputDir != Vector2.zero)
         {
@@ -138,11 +165,27 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void Dash()
+    {
+        if (charController.isGrounded && Input.GetButton("Run"))
+        {
+            dashing = true;
+        }
+        else if (!charController.isGrounded && (currentSpeed >= moveSpeed + 1f))
+        {
+            dashing = true;
+        }
+        else
+        {
+            dashing = false;
+        }
+    }
+
     void Gravity()
     {
         if (velocityY < 0 && !charController.isGrounded)
         {
-            fallMultiplier = 3f;
+            fallMultiplier = 4.5f;
         }
         else
         {
