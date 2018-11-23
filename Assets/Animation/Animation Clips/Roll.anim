@@ -92615,11 +92615,3 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.1666666
-    functionName: EndDodge
-    data: 
-    objectReferenceParameter: {fileID: 11500000, guid: 611b7c13365cf5b41a3882e7b578ee50,
-      type: 3}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
