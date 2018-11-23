@@ -20,6 +20,9 @@ public class PlayerMovement : MonoBehaviour
     [Range(0, 1), SerializeField]
     float airDodgeSpeedSmooth;
 
+    [SerializeField]
+    float airDodgeVelocity;
+
     float fallMultiplier = 1;
     bool stepOffLedge;
 
@@ -263,18 +266,23 @@ public class PlayerMovement : MonoBehaviour
             }
 
             Vector3 velocity = transform.forward * currentDodgeSpeed + Vector3.up * velocityY;
-            print(currentDodgeSpeed);
             charController.Move(velocity * Time.deltaTime);
         }
         else if (airDodging)
         {
             anim.SetBool("airDodge", true);
 
-            currentDodgeSpeed = Mathf.SmoothDamp(currentDodgeSpeed, endDodgeSpeed, ref dodgeSmoothVelocity, GetModifiedSmoothTime(dodgeSmoothTime));
+            //currentDodgeSpeed = Mathf.SmoothDamp(currentDodgeSpeed, endDodgeSpeed, ref dodgeSmoothVelocity, GetModifiedSmoothTime(dodgeSmoothTime));
 
-            Vector3 velocity = transform.forward * currentDodgeSpeed + Vector3.up * velocityY;
-
-            charController.Move(velocity * Time.deltaTime);
+            if (charController.isGrounded)
+            {
+                EndDodge();
+            }
+            else
+            {
+                Vector3 velocity = transform.forward * airDodgeVelocity + Vector3.up * velocityY;
+                charController.Move(velocity * Time.deltaTime);
+            }
         }
     }
 
@@ -289,7 +297,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Gravity()
     {
-        if (velocityY < 0 && !charController.isGrounded)
+        if (airDodging)
+        {
+            fallMultiplier = 0.1f;
+        }
+        else if (velocityY < 0 && !charController.isGrounded)
         {
             fallMultiplier = 4.5f;
         }
