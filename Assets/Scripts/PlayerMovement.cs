@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     CharacterController charController;
+    Animator anim;
 
     [SerializeField]
     float jumpHeight = 5.0f;
@@ -14,6 +15,13 @@ public class PlayerMovement : MonoBehaviour
     float airControlPercent;
     [Range(0, 1), SerializeField]
     float dashControlPercent;
+    [Range(0, 1), SerializeField]
+    float groundDodgeSpeedSmooth;
+    [Range(0, 1), SerializeField]
+    float airDodgeSpeedSmooth;
+
+    [SerializeField]
+    float airDodgeVelocity;
 
     float fallMultiplier = 1;
     bool stepOffLedge;
@@ -62,6 +70,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    float currentDodgeSpeed;
+
+    [SerializeField]
+    float initialDodgeSpeed = 5.0f;
+    [SerializeField]
+    float endDodgeSpeed = 2.0f;
+    [SerializeField]
+    float dodgeSmoothTime = 0.5f;
+
+    float dodgeSmoothVelocity;
+
     private float velocityY;
 
     public float VelocityY
@@ -96,9 +115,21 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    bool groundDodging = false;
+    bool airDodging = false;
+
+    public bool Dodging
+    {
+        get
+        {
+            return groundDodging;
+        }
+    }
+
 	void Start ()
 	{
         charController = GetComponent<CharacterController>();
+        anim = GetComponent<Animator>();
     }
 	
 	void Update ()
@@ -108,16 +139,17 @@ public class PlayerMovement : MonoBehaviour
 
         Gravity();
 
-        if (Input.GetButtonDown("Jump"))
-        {
-            Jump();
-        }
+        Dodge(inputDir);
 
-        Movement(inputDir);
+        if (!groundDodging && !airDodging)
+        {
+            Movement(inputDir);
+        }
     }
 
     void Movement(Vector2 inputDir)
     {
+        Jump();
         Dash();
 
         if (inputDir != Vector2.zero)
@@ -156,12 +188,16 @@ public class PlayerMovement : MonoBehaviour
 
     void Jump()
     {
-        if (charController.isGrounded)
-        {
-            stepOffLedge = false;
 
-            float jumpVelocity = Mathf.Sqrt(-2 * gravity * jumpHeight);
-            velocityY = jumpVelocity;
+        if (Input.GetButtonDown("Jump"))
+        {
+            if (charController.isGrounded)
+            {
+                stepOffLedge = false;
+
+                float jumpVelocity = Mathf.Sqrt(-2 * gravity * jumpHeight);
+                velocityY = jumpVelocity;
+            }
         }
     }
 
@@ -181,9 +217,91 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void Dodge(Vector2 inputDir)
+    {
+        float dodgeDirection;
+
+        if (Input.GetButtonDown("Dodge") && !(groundDodging || airDodging))
+        {
+            if (charController.isGrounded)
+            {
+                groundDodging = true;
+                airDodging = false;
+            }
+            else
+            {
+                airDodging = true;
+                groundDodging = false;
+            }
+
+            if (inputDir != Vector2.zero)
+            {
+                dodgeDirection = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg;
+            }
+            else
+            {
+                dodgeDirection = transform.eulerAngles.y;
+            }
+
+            transform.eulerAngles = Vector3.up * dodgeDirection;
+            currentDodgeSpeed = initialDodgeSpeed;
+            //print(initialDodgeSpeed);
+        }
+
+        if (groundDodging)
+        {
+            anim.SetBool("groundDodge", true);
+
+            /*if (!charController.isGrounded)
+            {
+                EndDodge();
+                print("rolled off edge");
+            }*/
+
+            currentDodgeSpeed = Mathf.SmoothDamp(currentDodgeSpeed, endDodgeSpeed, ref dodgeSmoothVelocity, GetModifiedSmoothTime(dodgeSmoothTime));
+
+            if (currentDodgeSpeed <= (endDodgeSpeed + 0.1))
+            {
+                 EndDodge();
+            }
+
+            Vector3 velocity = transform.forward * currentDodgeSpeed + Vector3.up * velocityY;
+            charController.Move(velocity * Time.deltaTime);
+        }
+        else if (airDodging)
+        {
+            anim.SetBool("airDodge", true);
+
+            //currentDodgeSpeed = Mathf.SmoothDamp(currentDodgeSpeed, endDodgeSpeed, ref dodgeSmoothVelocity, GetModifiedSmoothTime(dodgeSmoothTime));
+
+            if (charController.isGrounded)
+            {
+                EndDodge();
+            }
+            else
+            {
+                Vector3 velocity = transform.forward * airDodgeVelocity + Vector3.up * velocityY;
+                charController.Move(velocity * Time.deltaTime);
+            }
+        }
+    }
+
+    public void EndDodge()
+    {
+        anim.SetBool("groundDodge", false);
+        groundDodging = false;
+
+        anim.SetBool("airDodge", false);
+        airDodging = false;
+    }
+
     void Gravity()
     {
-        if (velocityY < 0 && !charController.isGrounded)
+        if (airDodging)
+        {
+            fallMultiplier = 0.1f;
+        }
+        else if (velocityY < 0 && !charController.isGrounded)
         {
             fallMultiplier = 4.5f;
         }
@@ -210,6 +328,25 @@ public class PlayerMovement : MonoBehaviour
 
     float GetModifiedSmoothTime(float smoothTime)
     {
+        if (groundDodging)
+        {
+            if (groundDodgeSpeedSmooth == 0)
+            {
+                return float.MaxValue;
+            }
+
+            return smoothTime / groundDodgeSpeedSmooth;
+        }
+        else if (airDodging)
+        {
+            if (airDodgeSpeedSmooth == 0)
+            {
+                return float.MaxValue;
+            }
+
+            return smoothTime / airDodgeSpeedSmooth;
+        }
+
         if (charController.isGrounded)
         {
             if (!dashing)
