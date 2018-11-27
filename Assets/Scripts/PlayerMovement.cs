@@ -19,9 +19,12 @@ public class PlayerMovement : MonoBehaviour
     float groundDodgeSpeedSmooth;
     [Range(0, 1), SerializeField]
     float airDodgeSpeedSmooth;
-
     [SerializeField]
-    float airDodgeVelocity;
+    float airDodgeUpwardVelocity;
+
+    float airDodgeTimer;
+    [SerializeField]
+    float airDodgeDuration = 0.5f;
 
     float fallMultiplier = 1;
     bool stepOffLedge;
@@ -76,6 +79,12 @@ public class PlayerMovement : MonoBehaviour
     float initialDodgeSpeed = 5.0f;
     [SerializeField]
     float endDodgeSpeed = 2.0f;
+
+    [SerializeField]
+    float initialAirDodgeSpeed = 8.0f;
+    [SerializeField]
+    float endAirDodgeSpeed = 0f;
+
     [SerializeField]
     float dodgeSmoothTime = 0.5f;
 
@@ -232,6 +241,9 @@ public class PlayerMovement : MonoBehaviour
             {
                 airDodging = true;
                 groundDodging = false;
+
+                airDodgeTimer = airDodgeDuration;
+                velocityY = airDodgeUpwardVelocity;
             }
 
             if (inputDir != Vector2.zero)
@@ -244,7 +256,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
             transform.eulerAngles = Vector3.up * dodgeDirection;
-            currentDodgeSpeed = initialDodgeSpeed;
+            currentDodgeSpeed = (groundDodging) ? initialDodgeSpeed : initialAirDodgeSpeed;
             //print(initialDodgeSpeed);
         }
 
@@ -272,16 +284,18 @@ public class PlayerMovement : MonoBehaviour
         {
             anim.SetBool("airDodge", true);
 
-            //currentDodgeSpeed = Mathf.SmoothDamp(currentDodgeSpeed, endDodgeSpeed, ref dodgeSmoothVelocity, GetModifiedSmoothTime(dodgeSmoothTime));
-
-            if (charController.isGrounded)
+            if (charController.isGrounded || airDodgeTimer <= 0)
             {
                 EndDodge();
             }
             else
             {
-                Vector3 velocity = transform.forward * airDodgeVelocity + Vector3.up * velocityY;
+                currentDodgeSpeed = Mathf.SmoothDamp(currentDodgeSpeed, endAirDodgeSpeed, ref dodgeSmoothVelocity, GetModifiedSmoothTime(dodgeSmoothTime));
+
+                Vector3 velocity = transform.forward * currentDodgeSpeed + Vector3.up * velocityY;
                 charController.Move(velocity * Time.deltaTime);
+
+                airDodgeTimer -= Time.deltaTime;
             }
         }
     }
@@ -299,7 +313,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (airDodging)
         {
-            fallMultiplier = 0.1f;
+            fallMultiplier = 4f;
         }
         else if (velocityY < 0 && !charController.isGrounded)
         {
