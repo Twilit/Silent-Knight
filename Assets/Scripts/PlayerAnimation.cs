@@ -9,6 +9,7 @@ public class PlayerAnimation : MonoBehaviour
     Animator anim;
     PlayerMovement movement;
     CharacterController charController;
+    PlayerAttack attack;
 
     [SerializeField]
     bool wasDashing;
@@ -18,6 +19,7 @@ public class PlayerAnimation : MonoBehaviour
         anim = GetComponent<Animator>();
         movement = GetComponent<PlayerMovement>();
         charController = GetComponent<CharacterController>();
+        attack = GetComponent<PlayerAttack>();
     }	
 
 	void Update () 
@@ -42,7 +44,7 @@ public class PlayerAnimation : MonoBehaviour
             anim.SetBool("suddenStop", true);
             wasDashing = false;
         }
-        else if ((movement.InputDir != Vector2.zero) || !charController.isGrounded)
+        else if ((movement.InputDir != Vector2.zero) || !charController.isGrounded || movement.Dodging)
         {
             anim.SetBool("suddenStop", false);
         }

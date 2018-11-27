@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     CharacterController charController;
     Animator anim;
+    PlayerAttack attack;
 
     [SerializeField]
     float jumpHeight = 5.0f;
@@ -139,6 +140,7 @@ public class PlayerMovement : MonoBehaviour
 	{
         charController = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
+        attack = GetComponent<PlayerAttack>();
     }
 	
 	void Update ()
@@ -148,12 +150,19 @@ public class PlayerMovement : MonoBehaviour
 
         Gravity();
 
-        Dodge(inputDir);
-
-        if (!groundDodging && !airDodging)
+        if (attack.AttackNumber == 0)
         {
-            Movement(inputDir);
+            if (!groundDodging && !airDodging)
+            {
+                Movement(inputDir);
+            }
         }
+        if (attack.FrameType == 0 || attack.FrameType == 4)
+        {
+            attack.AttackNumber = 0;
+            attack.FrameType = 0;
+            Dodge(inputDir);
+        }        
     }
 
     void Movement(Vector2 inputDir)
@@ -171,7 +180,7 @@ public class PlayerMovement : MonoBehaviour
             /*if ((((Mathf.Sign(targetRotation) == -1) ? (targetRotation + 360) : targetRotation) > (((Mathf.Sign(transform.eulerAngles.y + smoothedAngle) == -1) ? (transform.eulerAngles.y + smoothedAngle + 360) : transform.eulerAngles.y + smoothedAngle)) ||
                 (((Mathf.Sign(targetRotation) == -1) ? (targetRotation + 360) : targetRotation) < (((Mathf.Sign(transform.eulerAngles.y - smoothedAngle) == -1) ? (transform.eulerAngles.y - smoothedAngle - 360) : transform.eulerAngles.y - smoothedAngle)))))*/
 
-            if (/*Quaternion.Angle(Quaternion.Euler(Vector3.up * targetRotation), transform.rotation) > smoothedAngle || */justStartedMoving && charController.isGrounded && !dashing)
+            if (/*Quaternion.Angle(Quaternion.Euler(Vector3.up * targetRotation), transform.rotation) > smoothedAngle || */justStartedMoving && charController.isGrounded && /*!dashing*/ currentSpeed <= moveSpeed)
             {
                 transform.eulerAngles = Vector3.up * targetRotation;                
             }
