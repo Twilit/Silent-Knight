@@ -18,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
     [Range(0, 1), SerializeField]
     float dashControlPercent;
     [Range(0, 1), SerializeField]
+    float attackControlPercent;
+    [Range(0, 1), SerializeField]
     float groundDodgeSpeedSmooth;
     [Range(0, 1), SerializeField]
     float airDodgeSpeedSmooth;
@@ -72,6 +74,10 @@ public class PlayerMovement : MonoBehaviour
         get
         {
             return currentSpeed;
+        }
+        set
+        {
+            currentSpeed = value;
         }
     }
 
@@ -152,13 +158,11 @@ public class PlayerMovement : MonoBehaviour
 
         Gravity();
 
-        if (frameData.ActionName == null)
+        if (!groundDodging && !airDodging)
         {
-            if (!groundDodging && !airDodging)
-            {
-                Movement(inputDir);
-            }
+            Movement(inputDir);
         }
+
         if (frameData.FrameType == 0 || frameData.FrameType == 4)
         {
             InitiateDodge(inputDir);
@@ -169,41 +173,61 @@ public class PlayerMovement : MonoBehaviour
 
     void Movement(Vector2 inputDir)
     {
-        Jump();
-        Dash();
+        float targetRotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg;
 
-        if (inputDir != Vector2.zero)
+        if (frameData.ActionName == null)
         {
-            float targetRotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg;
+            Jump();
+            Dash();
 
-            //int smoothedAngle = 120;
-            float turnSmoothTime = 0.15f;
+            if (inputDir != Vector2.zero)
+            {                
+                //int smoothedAngle = 120;
+                float turnSmoothTime = 0.15f;
 
-            /*if ((((Mathf.Sign(targetRotation) == -1) ? (targetRotation + 360) : targetRotation) > (((Mathf.Sign(transform.eulerAngles.y + smoothedAngle) == -1) ? (transform.eulerAngles.y + smoothedAngle + 360) : transform.eulerAngles.y + smoothedAngle)) ||
-                (((Mathf.Sign(targetRotation) == -1) ? (targetRotation + 360) : targetRotation) < (((Mathf.Sign(transform.eulerAngles.y - smoothedAngle) == -1) ? (transform.eulerAngles.y - smoothedAngle - 360) : transform.eulerAngles.y - smoothedAngle)))))*/
+                /*if ((((Mathf.Sign(targetRotation) == -1) ? (targetRotation + 360) : targetRotation) > (((Mathf.Sign(transform.eulerAngles.y + smoothedAngle) == -1) ? (transform.eulerAngles.y + smoothedAngle + 360) : transform.eulerAngles.y + smoothedAngle)) ||
+                    (((Mathf.Sign(targetRotation) == -1) ? (targetRotation + 360) : targetRotation) < (((Mathf.Sign(transform.eulerAngles.y - smoothedAngle) == -1) ? (transform.eulerAngles.y - smoothedAngle - 360) : transform.eulerAngles.y - smoothedAngle)))))*/
 
-            if (/*Quaternion.Angle(Quaternion.Euler(Vector3.up * targetRotation), transform.rotation) > smoothedAngle || */justStartedMoving && charController.isGrounded && /*!dashing*/ currentSpeed <= moveSpeed)
-            {
-                transform.eulerAngles = Vector3.up * targetRotation;                
+                if (/*Quaternion.Angle(Quaternion.Euler(Vector3.up * targetRotation), transform.rotation) > smoothedAngle || */justStartedMoving && charController.isGrounded && /*!dashing*/ currentSpeed <= moveSpeed)
+                {
+                    transform.eulerAngles = Vector3.up * targetRotation;
+                }
+                else
+                {
+                    transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, GetModifiedSmoothTime(turnSmoothTime));
+                }
+
+                justStartedMoving = false;
             }
             else
             {
-                transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, GetModifiedSmoothTime(turnSmoothTime));
+                justStartedMoving = true;
             }
+            
+            float targetSpeed = ((dashing) ? dashSpeed : moveSpeed) * inputDir.magnitude;
+            currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedSmoothVelocity, GetModifiedSmoothTime(speedSmoothTime));
 
-            justStartedMoving = false;
+            Vector3 velocity = transform.forward * currentSpeed + Vector3.up * velocityY;
+
+            charController.Move(velocity * Time.deltaTime);
         }
-        else
+        else if (frameData.ActionName == "attack1" || frameData.ActionName == "attack2")
         {
-            justStartedMoving = true;
+            float turnSmoothTime = 0.35f;
+
+            if ((frameData.FrameType == 1 || frameData.FrameType == 2) && inputDir != Vector2.zero)
+            {
+                if (Quaternion.Angle(Quaternion.Euler(Vector3.up * targetRotation), transform.rotation) < 120)
+                {
+                    transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, GetModifiedSmoothTime(turnSmoothTime));
+                }
+            }
+            if (frameData.FrameType == 2)
+            {
+                Vector3 velocity = transform.forward * attack.AttackMovement + Vector3.up * velocityY;
+                charController.Move(velocity * Time.deltaTime);
+            }
         }
-
-        float targetSpeed = ((dashing) ? dashSpeed : moveSpeed) * inputDir.magnitude;
-        currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedSmoothVelocity, GetModifiedSmoothTime(speedSmoothTime));
-
-        Vector3 velocity = transform.forward * currentSpeed + Vector3.up * velocityY;
-
-        charController.Move(velocity * Time.deltaTime);
     }
 
     void Jump()
@@ -383,6 +407,16 @@ public class PlayerMovement : MonoBehaviour
 
         if (charController.isGrounded)
         {
+            if (frameData.ActionName == "attack1" || frameData.ActionName == "attack2")
+            {
+                if (attackControlPercent == 0)
+                {
+                    return float.MaxValue;
+                }
+
+                return smoothTime / attackControlPercent;
+            }
+
             if (!dashing)
             {
                 return smoothTime;

@@ -9,6 +9,19 @@ public class PlayerAttack : MonoBehaviour
     CharacterController charController;
     FrameData frameData;
 
+    float attackDirection;
+
+    public float AttackDirection
+    {
+        get { return attackDirection; }
+    }
+
+    float attackMovement = 2f;
+    public float AttackMovement
+    {
+        get { return attackMovement; }
+    }
+
     void Start () 
 	{
         anim = GetComponent<Animator>();
@@ -28,21 +41,55 @@ public class PlayerAttack : MonoBehaviour
             anim.SetInteger("attackNumber", 0);
         }
 
+        if ((!charController.isGrounded) && frameData.ActionName != null)
+        {
+            CancelAttack();
+        }
+
         print("action: " + frameData.ActionName + " frameType: " + frameData.FrameType);
 	}
 
     void Attack()
     {
+        if (frameData.ActionName == null && !movement.Dodging && frameData.FrameType != 0)
+        {
+            frameData.FrameType = 0;
+        }
+
+        if (frameData.FrameType == 0)
+        {
+            movement.CurrentSpeed = 0;
+
+            if (movement.InputDir != Vector2.zero)
+            {
+                attackDirection = Mathf.Atan2(movement.InputDir.x, movement.InputDir.y) * Mathf.Rad2Deg;
+            }
+            else
+            {
+                attackDirection = transform.eulerAngles.y;
+            }
+
+            transform.eulerAngles = Vector3.up * attackDirection;
+        }    
+
         if ((frameData.ActionName == null && frameData.FrameType == 0)
             || frameData.ActionName == "attack2" && frameData.FrameType == 4)
         {
+            attackMovement = 3f;
             frameData.ActionName = "attack1";
             anim.SetInteger("attackNumber", 1);
         }
         else if (frameData.ActionName == "attack1" && frameData.FrameType == 4)
         {
+            attackMovement = 2f;
             frameData.ActionName = "attack2";
             anim.SetInteger("attackNumber", 2);
         }
+    }
+
+    void CancelAttack()
+    {
+        frameData.FrameType = 0;
+        frameData.ActionName = null;
     }
 }
