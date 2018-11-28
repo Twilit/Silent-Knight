@@ -92607,6 +92607,30 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_GenerateMotionCurves: 0
   m_Events:
+  - time: 0
+    functionName: Frames
+    data: 
+    objectReferenceParameter: {fileID: 11500000, guid: effd9bc22f2a32940ae3c5e028050c3e,
+      type: 3}
+    floatParameter: 0
+    intParameter: 5
+    messageOptions: 0
+  - time: 0.2
+    functionName: Frames
+    data: 
+    objectReferenceParameter: {fileID: 11500000, guid: effd9bc22f2a32940ae3c5e028050c3e,
+      type: 3}
+    floatParameter: 0
+    intParameter: 1
+    messageOptions: 0
+  - time: 0.8333333
+    functionName: Frames
+    data: 
+    objectReferenceParameter: {fileID: 11500000, guid: effd9bc22f2a32940ae3c5e028050c3e,
+      type: 3}
+    floatParameter: 0
+    intParameter: 3
+    messageOptions: 0
   - time: 1
     functionName: EndDodge
     data: 

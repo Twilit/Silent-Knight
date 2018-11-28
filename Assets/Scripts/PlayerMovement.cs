@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     CharacterController charController;
     Animator anim;
     PlayerAttack attack;
+    FrameData frameData;
 
     [SerializeField]
     float jumpHeight = 5.0f;
@@ -141,6 +142,7 @@ public class PlayerMovement : MonoBehaviour
         charController = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
         attack = GetComponent<PlayerAttack>();
+        frameData = GetComponent<FrameData>();
     }
 	
 	void Update ()
@@ -150,17 +152,15 @@ public class PlayerMovement : MonoBehaviour
 
         Gravity();
 
-        if (attack.AttackNumber == 0)
+        if (frameData.ActionName == null)
         {
             if (!groundDodging && !airDodging)
             {
                 Movement(inputDir);
             }
         }
-        if (attack.FrameType == 0 || attack.FrameType == 4)
+        if (frameData.FrameType == 0 || frameData.FrameType == 4)
         {
-            attack.AttackNumber = 0;
-            attack.FrameType = 0;
             Dodge(inputDir);
         }        
     }
@@ -241,6 +241,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetButtonDown("Dodge") && !(groundDodging || airDodging))
         {
+            //frameData.ActionName = "roll";
+            //frameData.FrameType = 0;
+
             if (charController.isGrounded)
             {
                 groundDodging = true;
@@ -307,6 +310,11 @@ public class PlayerMovement : MonoBehaviour
                 airDodgeTimer -= Time.deltaTime;
             }
         }
+    }
+
+    void DuringDodge()
+    {
+
     }
 
     public void EndDodge()

@@ -7,75 +7,42 @@ public class PlayerAttack : MonoBehaviour
     Animator anim;
     PlayerMovement movement;
     CharacterController charController;
-
-    int frameType = 0;
-    /*
-    1 = Start Up
-    2 = Active
-    3 = Recovery
-    4 = Cancellable
-
-    0 = Not Attacking
-    */
-
-    public int FrameType
-    {
-        get { return frameType; }
-
-        set { frameType = 0; }
-    }
-
-    int attackNumber = 0;
-
-    public int AttackNumber
-    {
-        get { return attackNumber; }
-
-        set
-        {
-            attackNumber = 0;
-            frameType = 0;
-        }
-    }
+    FrameData frameData;
 
     void Start () 
 	{
         anim = GetComponent<Animator>();
         movement = GetComponent<PlayerMovement>();
         charController = GetComponent<CharacterController>();
+        frameData = GetComponent<FrameData>();
     }
 	
 	void Update () 
 	{
-        if (Input.GetButtonDown("Attack"))
+        if (Input.GetButtonDown("Attack") && charController.isGrounded)
         {
             Attack();
         }
+        else if (frameData.ActionName == null)
+        {
+            anim.SetInteger("attackNumber", 0);
+        }
 
-        anim.SetInteger("attackNumber", attackNumber);
+        print("action: " + frameData.ActionName + " frameType: " + frameData.FrameType);
 	}
 
     void Attack()
     {
-        if ((attackNumber == 0 && frameType == 0)
-            || attackNumber == 2 && frameType == 4)
+        if ((frameData.ActionName == null && frameData.FrameType == 0)
+            || frameData.ActionName == "attack2" && frameData.FrameType == 4)
         {
-            attackNumber = 1;
+            frameData.ActionName = "attack1";
+            anim.SetInteger("attackNumber", 1);
         }
-        else if (attackNumber == 1 && frameType == 4)
+        else if (frameData.ActionName == "attack1" && frameData.FrameType == 4)
         {
-            attackNumber = 2;
-            print("working");
-        }
-    }
-
-    void FrameData(int getFrameType)
-    {
-        frameType = getFrameType;
-
-        if (frameType == 0)
-        {
-            attackNumber = 0;
+            frameData.ActionName = "attack2";
+            anim.SetInteger("attackNumber", 2);
         }
     }
 }

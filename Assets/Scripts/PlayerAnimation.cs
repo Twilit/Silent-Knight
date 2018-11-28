@@ -10,6 +10,7 @@ public class PlayerAnimation : MonoBehaviour
     PlayerMovement movement;
     CharacterController charController;
     PlayerAttack attack;
+    FrameData frameData;
 
     [SerializeField]
     bool wasDashing;
@@ -20,6 +21,7 @@ public class PlayerAnimation : MonoBehaviour
         movement = GetComponent<PlayerMovement>();
         charController = GetComponent<CharacterController>();
         attack = GetComponent<PlayerAttack>();
+        frameData = GetComponent<FrameData>();
     }	
 
 	void Update () 
