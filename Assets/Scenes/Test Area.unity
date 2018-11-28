@@ -465,6 +465,7 @@ MonoBehaviour:
   gravity: -12
   airControlPercent: 0.65
   dashControlPercent: 0.4
+  attackControlPercent: 0.862
   groundDodgeSpeedSmooth: 0.597
   airDodgeSpeedSmooth: 0.789
   airDodgeUpwardVelocity: 12

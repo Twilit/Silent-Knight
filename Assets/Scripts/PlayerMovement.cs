@@ -228,6 +228,11 @@ public class PlayerMovement : MonoBehaviour
                 charController.Move(velocity * Time.deltaTime);
             }
         }
+        else if (frameData.ActionName == "attackRunning" && (frameData.FrameType == 1 || frameData.FrameType == 2))
+        {
+            Vector3 velocity = transform.forward * attack.AttackMovement + Vector3.up * velocityY;
+            charController.Move(velocity * Time.deltaTime);
+        }
     }
 
     void Jump()

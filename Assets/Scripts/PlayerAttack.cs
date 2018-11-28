@@ -46,11 +46,14 @@ public class PlayerAttack : MonoBehaviour
             CancelAttack();
         }
 
-        print("action: " + frameData.ActionName + " frameType: " + frameData.FrameType);
+        //print("action: " + frameData.ActionName + " frameType: " + frameData.FrameType);
+        //print("currentSpeed: " + movement.CurrentSpeed + " dashSpeed: " + movement.DashSpeed);
 	}
 
     void Attack()
     {
+        bool running = false;
+
         if (frameData.ActionName == null && !movement.Dodging && frameData.FrameType != 0)
         {
             frameData.FrameType = 0;
@@ -58,6 +61,11 @@ public class PlayerAttack : MonoBehaviour
 
         if (frameData.FrameType == 0)
         {
+            if (movement.CurrentSpeed >= movement.DashSpeed - 0.1f)
+            {
+                running = true;
+            }
+
             movement.CurrentSpeed = 0;
 
             if (movement.InputDir != Vector2.zero)
@@ -72,7 +80,13 @@ public class PlayerAttack : MonoBehaviour
             transform.eulerAngles = Vector3.up * attackDirection;
         }    
 
-        if ((frameData.ActionName == null && frameData.FrameType == 0)
+        if (frameData.ActionName == null && movement.Dashing && running)
+        {
+            attackMovement = 5f;
+            frameData.ActionName = "attackRunning";
+            anim.SetInteger("attackNumber", 3);
+        }
+        else if ((frameData.ActionName == null && frameData.FrameType == 0) 
             || frameData.ActionName == "attack2" && frameData.FrameType == 4)
         {
             attackMovement = 3f;
