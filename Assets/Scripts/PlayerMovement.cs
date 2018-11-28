@@ -161,8 +161,10 @@ public class PlayerMovement : MonoBehaviour
         }
         if (frameData.FrameType == 0 || frameData.FrameType == 4)
         {
-            Dodge(inputDir);
-        }        
+            InitiateDodge(inputDir);
+        }
+
+        DuringDodge();
     }
 
     void Movement(Vector2 inputDir)
@@ -235,7 +237,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void Dodge(Vector2 inputDir)
+    void InitiateDodge(Vector2 inputDir)
     {
         float dodgeDirection;
 
@@ -270,8 +272,11 @@ public class PlayerMovement : MonoBehaviour
             transform.eulerAngles = Vector3.up * dodgeDirection;
             currentDodgeSpeed = (groundDodging) ? initialDodgeSpeed : initialAirDodgeSpeed;
             //print(initialDodgeSpeed);
-        }
+        }        
+    }
 
+    void DuringDodge()
+    {
         if (groundDodging)
         {
             anim.SetBool("groundDodge", true);
@@ -286,7 +291,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (currentDodgeSpeed <= (endDodgeSpeed + 0.1))
             {
-                 EndDodge();
+                EndDodge();
             }
 
             Vector3 velocity = transform.forward * currentDodgeSpeed + Vector3.up * velocityY;
@@ -312,13 +317,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void DuringDodge()
-    {
-
-    }
-
     public void EndDodge()
     {
+        frameData.ActionName = null;
+        frameData.FrameType = 0;
+
         anim.SetBool("groundDodge", false);
         groundDodging = false;
 
