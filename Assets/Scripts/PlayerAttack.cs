@@ -46,7 +46,7 @@ public class PlayerAttack : MonoBehaviour
             CancelAttack();
         }
 
-        //print("action: " + frameData.ActionName + " frameType: " + frameData.FrameType);
+        print("action: " + frameData.ActionName + " frameType: " + frameData.FrameType);
         //print("currentSpeed: " + movement.CurrentSpeed + " dashSpeed: " + movement.DashSpeed);
 	}
 

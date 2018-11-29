@@ -62060,4 +62060,52 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_GenerateMotionCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0
+    functionName: Frames
+    data: 
+    objectReferenceParameter: {fileID: 11500000, guid: effd9bc22f2a32940ae3c5e028050c3e,
+      type: 3}
+    floatParameter: 0
+    intParameter: 1
+    messageOptions: 0
+  - time: 0.33333334
+    functionName: Frames
+    data: 
+    objectReferenceParameter: {fileID: 11500000, guid: effd9bc22f2a32940ae3c5e028050c3e,
+      type: 3}
+    floatParameter: 0
+    intParameter: 1
+    messageOptions: 0
+  - time: 0.36666667
+    functionName: Frames
+    data: 
+    objectReferenceParameter: {fileID: 11500000, guid: effd9bc22f2a32940ae3c5e028050c3e,
+      type: 3}
+    floatParameter: 0
+    intParameter: 2
+    messageOptions: 0
+  - time: 0.5833333
+    functionName: Frames
+    data: 
+    objectReferenceParameter: {fileID: 11500000, guid: effd9bc22f2a32940ae3c5e028050c3e,
+      type: 3}
+    floatParameter: 0
+    intParameter: 3
+    messageOptions: 0
+  - time: 0.8333333
+    functionName: Frames
+    data: 
+    objectReferenceParameter: {fileID: 11500000, guid: effd9bc22f2a32940ae3c5e028050c3e,
+      type: 3}
+    floatParameter: 0
+    intParameter: 4
+    messageOptions: 0
+  - time: 1.2833333
+    functionName: Frames
+    data: 
+    objectReferenceParameter: {fileID: 11500000, guid: effd9bc22f2a32940ae3c5e028050c3e,
+      type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
