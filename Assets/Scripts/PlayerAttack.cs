@@ -82,7 +82,7 @@ public class PlayerAttack : MonoBehaviour
 
         if (frameData.ActionName == null && movement.Dashing && running)
         {
-            attackMovement = 5f;
+            attackMovement = 5.5f;
             frameData.ActionName = "attackRunning";
             anim.SetInteger("attackNumber", 3);
         }
@@ -90,13 +90,13 @@ public class PlayerAttack : MonoBehaviour
             || frameData.ActionName == "attack2" && frameData.FrameType == 4
             || frameData.ActionName == "attackRunning" && frameData.FrameType == 4)
         {
-            attackMovement = 3f;
+            attackMovement = 4.5f;
             frameData.ActionName = "attack1";
             anim.SetInteger("attackNumber", 1);
         }
         else if (frameData.ActionName == "attack1" && frameData.FrameType == 4)
         {
-            attackMovement = 2f;
+            attackMovement = 3f;
             frameData.ActionName = "attack2";
             anim.SetInteger("attackNumber", 2);
         }

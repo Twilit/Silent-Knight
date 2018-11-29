@@ -31,6 +31,8 @@ public class FrameData : MonoBehaviour
         set { actionName = value; }
     }
 
+    string currentAction = null;
+
     void Start ()
     {
 		
@@ -43,13 +45,18 @@ public class FrameData : MonoBehaviour
 
     void Frames(int getFrameType)
     {
-        frameType = getFrameType;
+        if (!(getFrameType == 0 && frameType != 4))
+        {
+            frameType = getFrameType;
+        }
 
         if (actionName != null)
         {
+
             if (frameType == 0)
             {
                 actionName = null;
+                currentAction = null;
             }
         }
     }
