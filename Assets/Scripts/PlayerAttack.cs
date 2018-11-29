@@ -87,7 +87,8 @@ public class PlayerAttack : MonoBehaviour
             anim.SetInteger("attackNumber", 3);
         }
         else if ((frameData.ActionName == null && frameData.FrameType == 0) 
-            || frameData.ActionName == "attack2" && frameData.FrameType == 4)
+            || frameData.ActionName == "attack2" && frameData.FrameType == 4
+            || frameData.ActionName == "attackRunning" && frameData.FrameType == 4)
         {
             attackMovement = 3f;
             frameData.ActionName = "attack1";
