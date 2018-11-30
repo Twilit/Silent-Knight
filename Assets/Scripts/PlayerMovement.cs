@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     Animator anim;
     PlayerAttack attack;
     FrameData frameData;
+    PlayerInputBuffer inputBuffer;
 
     [SerializeField]
     float jumpHeight = 5.0f;
@@ -149,6 +150,7 @@ public class PlayerMovement : MonoBehaviour
         anim = GetComponent<Animator>();
         attack = GetComponent<PlayerAttack>();
         frameData = GetComponent<FrameData>();
+        inputBuffer = GetComponent<PlayerInputBuffer>();
     }
 	
 	void Update ()
@@ -181,7 +183,7 @@ public class PlayerMovement : MonoBehaviour
             Dash();
 
             if (inputDir != Vector2.zero)
-            {                
+            {
                 //int smoothedAngle = 120;
                 float turnSmoothTime = 0.15f;
 
@@ -270,9 +272,9 @@ public class PlayerMovement : MonoBehaviour
     {
         float dodgeDirection;
 
-        if (Input.GetButtonDown("Dodge") && !(groundDodging || airDodging))
+        if ((Input.GetButtonDown("Dodge") || inputBuffer.BufferedInput == "Dodge") && !(groundDodging || airDodging))
         {
-            //frameData.ActionName = "roll";
+            frameData.ActionName = "roll";
             //frameData.FrameType = 0;
 
             if (charController.isGrounded)
@@ -300,6 +302,8 @@ public class PlayerMovement : MonoBehaviour
 
             transform.eulerAngles = Vector3.up * dodgeDirection;
             currentDodgeSpeed = (groundDodging) ? initialDodgeSpeed : initialAirDodgeSpeed;
+
+            inputBuffer.BufferedInput = null;
             //print(initialDodgeSpeed);
         }        
     }

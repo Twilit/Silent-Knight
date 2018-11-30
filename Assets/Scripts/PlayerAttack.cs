@@ -8,6 +8,7 @@ public class PlayerAttack : MonoBehaviour
     PlayerMovement movement;
     CharacterController charController;
     FrameData frameData;
+    PlayerInputBuffer inputBuffer;
 
     float attackDirection;
 
@@ -28,13 +29,22 @@ public class PlayerAttack : MonoBehaviour
         movement = GetComponent<PlayerMovement>();
         charController = GetComponent<CharacterController>();
         frameData = GetComponent<FrameData>();
+        inputBuffer = GetComponent<PlayerInputBuffer>();
     }
 	
 	void Update () 
 	{
-        if (Input.GetButtonDown("Attack") && charController.isGrounded)
+        if ((Input.GetButtonDown("Attack") && charController.isGrounded) || inputBuffer.BufferedInput == "Attack")
         {
-            Attack();
+            if (frameData.ActionName == null && !movement.Dodging && frameData.FrameType != 0)
+            {
+                frameData.FrameType = 0;
+            }
+
+            if (frameData.FrameType == 0 || frameData.FrameType == 4)
+            {
+                Attack();
+            }
         }
         else if (frameData.ActionName == null)
         {
@@ -53,11 +63,6 @@ public class PlayerAttack : MonoBehaviour
     void Attack()
     {
         bool running = false;
-
-        if (frameData.ActionName == null && !movement.Dodging && frameData.FrameType != 0)
-        {
-            frameData.FrameType = 0;
-        }
 
         if (frameData.FrameType == 0)
         {
@@ -100,6 +105,8 @@ public class PlayerAttack : MonoBehaviour
             frameData.ActionName = "attack2";
             anim.SetInteger("attackNumber", 2);
         }
+
+        inputBuffer.BufferedInput = null;
     }
 
     void CancelAttack()

@@ -45,7 +45,7 @@ public class FrameData : MonoBehaviour
 
     void Frames(int getFrameType)
     {
-        if (!(getFrameType == 0 && frameType != 4))
+        if (!((getFrameType == 0 || getFrameType == 5) && frameType != 4)) //Fixes bug that cancels attack when previous attack ends
         {
             frameType = getFrameType;
         }
