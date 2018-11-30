@@ -272,7 +272,7 @@ public class PlayerMovement : MonoBehaviour
     {
         float dodgeDirection;
 
-        if ((Input.GetButtonDown("Dodge") || inputBuffer.BufferedInput == "Dodge") && !(groundDodging || airDodging))
+        if ((Input.GetButtonDown("Dodge") || inputBuffer.BufferedInput == "Dodge") && !(groundDodging || airDodging) && frameData.ActionName != "roll")
         {
             frameData.ActionName = "roll";
             currentSpeed = 0;
