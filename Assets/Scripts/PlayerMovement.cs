@@ -23,13 +23,6 @@ public class PlayerMovement : MonoBehaviour
     [Range(0, 1), SerializeField]
     float groundDodgeSpeedSmooth;
     [Range(0, 1), SerializeField]
-    float airDodgeSpeedSmooth;
-    [SerializeField]
-    float airDodgeUpwardVelocity;
-
-    float airDodgeTimer;
-    [SerializeField]
-    float airDodgeDuration = 0.5f;
 
     float fallMultiplier = 1;
     bool stepOffLedge;
@@ -90,11 +83,6 @@ public class PlayerMovement : MonoBehaviour
     float endDodgeSpeed = 2.0f;
 
     [SerializeField]
-    float initialAirDodgeSpeed = 8.0f;
-    [SerializeField]
-    float endAirDodgeSpeed = 0f;
-
-    [SerializeField]
     float dodgeSmoothTime = 0.5f;
 
     float dodgeSmoothVelocity;
@@ -134,7 +122,6 @@ public class PlayerMovement : MonoBehaviour
     }
 
     bool groundDodging = false;
-    bool airDodging = false;
 
     public bool Dodging
     {
@@ -160,7 +147,7 @@ public class PlayerMovement : MonoBehaviour
 
         Gravity();
 
-        if (!groundDodging && !airDodging)
+        if (!groundDodging)
         {
             Movement(inputDir);
         }
@@ -272,37 +259,27 @@ public class PlayerMovement : MonoBehaviour
     {
         float dodgeDirection;
 
-        if ((Input.GetButtonDown("Dodge") || inputBuffer.BufferedInput == "Dodge") && !(groundDodging || airDodging) && frameData.ActionName != "roll")
-        {
-            frameData.ActionName = "roll";
-            currentSpeed = 0;
-            //frameData.FrameType = 0;
-
+        if ((Input.GetButtonDown("Dodge") || inputBuffer.BufferedInput == "Dodge") && !groundDodging && frameData.ActionName != "roll")
+        {     
             if (charController.isGrounded)
             {
                 groundDodging = true;
-                airDodging = false;
-            }
-            else
-            {
-                airDodging = true;
-                groundDodging = false;
+                currentSpeed = 0;
+                frameData.ActionName = "roll";
+                anim.SetBool("groundDodge", true);
 
-                airDodgeTimer = airDodgeDuration;
-                velocityY = airDodgeUpwardVelocity;
-            }
+                if (inputDir != Vector2.zero)
+                {
+                    dodgeDirection = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg;
+                }
+                else
+                {
+                    dodgeDirection = transform.eulerAngles.y;
+                }
 
-            if (inputDir != Vector2.zero)
-            {
-                dodgeDirection = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg;
+                transform.eulerAngles = Vector3.up * dodgeDirection;
+                currentDodgeSpeed = initialDodgeSpeed;
             }
-            else
-            {
-                dodgeDirection = transform.eulerAngles.y;
-            }
-
-            transform.eulerAngles = Vector3.up * dodgeDirection;
-            currentDodgeSpeed = (groundDodging) ? initialDodgeSpeed : initialAirDodgeSpeed;
 
             inputBuffer.BufferedInput = null;
             //print(initialDodgeSpeed);
@@ -312,15 +289,12 @@ public class PlayerMovement : MonoBehaviour
     void DuringDodge()
     {
         if (groundDodging)
-        {
-            anim.SetBool("groundDodge", true);
-
+        {           
             /*if (!charController.isGrounded)
             {
                 EndDodge();
                 print("rolled off edge");
             }*/
-
             currentDodgeSpeed = Mathf.SmoothDamp(currentDodgeSpeed, endDodgeSpeed, ref dodgeSmoothVelocity, GetModifiedSmoothTime(dodgeSmoothTime));
 
             if (currentDodgeSpeed <= (endDodgeSpeed + 0.1))
@@ -331,24 +305,6 @@ public class PlayerMovement : MonoBehaviour
             Vector3 velocity = transform.forward * currentDodgeSpeed + Vector3.up * velocityY;
             charController.Move(velocity * Time.deltaTime);
         }
-        else if (airDodging)
-        {
-            anim.SetBool("airDodge", true);
-
-            if (charController.isGrounded || airDodgeTimer <= 0)
-            {
-                EndDodge();
-            }
-            else
-            {
-                currentDodgeSpeed = Mathf.SmoothDamp(currentDodgeSpeed, endAirDodgeSpeed, ref dodgeSmoothVelocity, GetModifiedSmoothTime(dodgeSmoothTime));
-
-                Vector3 velocity = transform.forward * currentDodgeSpeed + Vector3.up * velocityY;
-                charController.Move(velocity * Time.deltaTime);
-
-                airDodgeTimer -= Time.deltaTime;
-            }
-        }
     }
 
     public void EndDodge()
@@ -358,18 +314,11 @@ public class PlayerMovement : MonoBehaviour
 
         anim.SetBool("groundDodge", false);
         groundDodging = false;
-
-        anim.SetBool("airDodge", false);
-        airDodging = false;
     }
 
     void Gravity()
     {
-        if (airDodging)
-        {
-            fallMultiplier = 4f;
-        }
-        else if (velocityY < 0 && !charController.isGrounded)
+        if (velocityY < 0 && !charController.isGrounded)
         {
             fallMultiplier = 4.5f;
         }
@@ -404,15 +353,6 @@ public class PlayerMovement : MonoBehaviour
             }
 
             return smoothTime / groundDodgeSpeedSmooth;
-        }
-        else if (airDodging)
-        {
-            if (airDodgeSpeedSmooth == 0)
-            {
-                return float.MaxValue;
-            }
-
-            return smoothTime / airDodgeSpeedSmooth;
         }
 
         if (charController.isGrounded)
