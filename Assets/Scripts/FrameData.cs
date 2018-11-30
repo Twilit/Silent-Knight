@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FrameData : MonoBehaviour
 {
+    PlayerMovement movement;
+
     int frameType = 0;
     /*
     1 = Start Up / Unbufferable Recovery
@@ -35,13 +37,16 @@ public class FrameData : MonoBehaviour
 
     void Start ()
     {
-		
+        movement = GetComponent<PlayerMovement>();
 	}
 
 	void Update ()
     {
-		
-	}
+        if (actionName == null && !movement.Dodging && frameType != 0)
+        {
+            frameType = 0;
+        }
+    }
 
     void Frames(int getFrameType)
     {

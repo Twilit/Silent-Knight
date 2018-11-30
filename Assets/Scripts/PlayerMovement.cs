@@ -275,6 +275,7 @@ public class PlayerMovement : MonoBehaviour
         if ((Input.GetButtonDown("Dodge") || inputBuffer.BufferedInput == "Dodge") && !(groundDodging || airDodging))
         {
             frameData.ActionName = "roll";
+            currentSpeed = 0;
             //frameData.FrameType = 0;
 
             if (charController.isGrounded)

@@ -36,10 +36,10 @@ public class PlayerAttack : MonoBehaviour
 	{
         if ((Input.GetButtonDown("Attack") && charController.isGrounded) || inputBuffer.BufferedInput == "Attack")
         {
-            if (frameData.ActionName == null && !movement.Dodging && frameData.FrameType != 0)
+            /*if (frameData.ActionName == null && !movement.Dodging && frameData.FrameType != 0)
             {
                 frameData.FrameType = 0;
-            }
+            }*/
 
             if (frameData.FrameType == 0 || frameData.FrameType == 4)
             {

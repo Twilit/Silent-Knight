@@ -22,7 +22,7 @@ public class PlayerInputBuffer : MonoBehaviour
     
 	void Update ()
     {
-        if (frameData.FrameType == 3 && GetInput() != null)
+        if ((frameData.FrameType == 2 || frameData.FrameType == 3) && GetInput() != null)
         {
             //bufferedInput = (GetInput() != bufferedInput) ? GetInput() : bufferedInput;
             bufferedInput = GetInput();
