@@ -5,6 +5,7 @@ using UnityEngine;
 public class FrameData : MonoBehaviour
 {
     PlayerMovement movement;
+    Animator anim;
 
     int frameType = 0;
     /*
@@ -38,11 +39,12 @@ public class FrameData : MonoBehaviour
     void Start ()
     {
         movement = GetComponent<PlayerMovement>();
+        anim = GetComponent<Animator>();
 	}
 
 	void Update ()
     {
-        if (actionName == null && !movement.Dodging && frameType != 0)
+        if (actionName == null && frameType != 0)
         {
             frameType = 0;
         }
@@ -50,7 +52,7 @@ public class FrameData : MonoBehaviour
 
     void Frames(int getFrameType)
     {
-        if (!((getFrameType == 0 || getFrameType == 5) && frameType != 4)) //Fixes bug that cancels attack when previous attack ends
+        if (!((getFrameType == 0) && frameType != 4)) //Fixes bug that cancels attack when previous attack ends
         {
             frameType = getFrameType;
         }
@@ -62,6 +64,7 @@ public class FrameData : MonoBehaviour
             {
                 actionName = null;
                 currentAction = null;
+                anim.SetInteger("attackNumber", 0);
             }
         }
     }

@@ -22,7 +22,6 @@ public class PlayerMovement : MonoBehaviour
     float attackControlPercent;
     [Range(0, 1), SerializeField]
     float groundDodgeSpeedSmooth;
-    [Range(0, 1), SerializeField]
 
     float fallMultiplier = 1;
     bool stepOffLedge;
@@ -121,16 +120,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    bool groundDodging = false;
-
-    public bool Dodging
-    {
-        get
-        {
-            return groundDodging;
-        }
-    }
-
 	void Start ()
 	{
         charController = GetComponent<CharacterController>();
@@ -147,15 +136,12 @@ public class PlayerMovement : MonoBehaviour
 
         Gravity();
 
-        if (!groundDodging)
+        if (frameData.ActionName != "roll")
         {
             Movement(inputDir);
         }
 
-        if (frameData.FrameType == 0 || frameData.FrameType == 4)
-        {
-            InitiateDodge(inputDir);
-        }
+        InitiateDodge(inputDir);
 
         DuringDodge();
     }
@@ -222,6 +208,10 @@ public class PlayerMovement : MonoBehaviour
             Vector3 velocity = transform.forward * attack.AttackMovement + Vector3.up * velocityY;
             charController.Move(velocity * Time.deltaTime);
         }
+        else if (frameData.ActionName == "roll")
+        {
+            print("Roll");
+        }
     }
 
     void Jump()
@@ -255,46 +245,63 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    /*
+    1 = Start Up / Unbufferable Recovery
+    2 = Active
+    3 = Bufferable Recovery
+    4 = Cancellable
+    
+    5 = Invincibility
+    0 = Nothing
+    */
+
     void InitiateDodge(Vector2 inputDir)
     {
         float dodgeDirection;
-
-        if ((Input.GetButtonDown("Dodge") || inputBuffer.BufferedInput == "Dodge") && !groundDodging && frameData.ActionName != "roll")
-        {     
-            if (charController.isGrounded)
+        //print(frameData.ActionName);
+        if ((Input.GetButtonDown("Dodge") || inputBuffer.BufferedInput == "Dodge") /*&& frameData.ActionName != "roll"*/)
+        {
+            if (frameData.FrameType == 0 || frameData.FrameType == 4)
             {
-                groundDodging = true;
-                currentSpeed = 0;
-                frameData.ActionName = "roll";
-                anim.SetBool("groundDodge", true);
-
-                if (inputDir != Vector2.zero)
+                if (charController.isGrounded)
                 {
-                    dodgeDirection = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg;
-                }
-                else
-                {
-                    dodgeDirection = transform.eulerAngles.y;
-                }
+                    if (frameData.ActionName == "roll")
+                    {
+                        frameData.ActionName = "roll2";
+                        anim.SetInteger("attackNumber", -2);
+                    }
+                    else
+                    {
+                        frameData.ActionName = "roll";
+                        anim.SetInteger("attackNumber", -1);
+                    }
 
-                transform.eulerAngles = Vector3.up * dodgeDirection;
-                currentDodgeSpeed = initialDodgeSpeed;
+                    currentSpeed = 0;
+
+                    if (inputDir != Vector2.zero)
+                    {
+                        dodgeDirection = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg;
+                    }
+                    else
+                    {
+                        dodgeDirection = transform.eulerAngles.y;
+                    }
+
+                    transform.eulerAngles = Vector3.up * dodgeDirection;
+                    currentDodgeSpeed = initialDodgeSpeed;
+                }
+                
+                inputBuffer.BufferedInput = null;
+                //print(initialDodgeSpeed);
             }
-
-            inputBuffer.BufferedInput = null;
-            //print(initialDodgeSpeed);
         }        
     }
 
     void DuringDodge()
     {
-        if (groundDodging)
+        if (frameData.ActionName == "roll" || frameData.ActionName == "roll2")
         {           
-            /*if (!charController.isGrounded)
-            {
-                EndDodge();
-                print("rolled off edge");
-            }*/
+            /*
             currentDodgeSpeed = Mathf.SmoothDamp(currentDodgeSpeed, endDodgeSpeed, ref dodgeSmoothVelocity, GetModifiedSmoothTime(dodgeSmoothTime));
 
             if (currentDodgeSpeed <= (endDodgeSpeed + 0.1))
@@ -304,6 +311,8 @@ public class PlayerMovement : MonoBehaviour
 
             Vector3 velocity = transform.forward * currentDodgeSpeed + Vector3.up * velocityY;
             charController.Move(velocity * Time.deltaTime);
+            */
+
         }
     }
 
@@ -312,8 +321,7 @@ public class PlayerMovement : MonoBehaviour
         frameData.ActionName = null;
         frameData.FrameType = 0;
 
-        anim.SetBool("groundDodge", false);
-        groundDodging = false;
+        anim.SetInteger("attackNumber", 0);
     }
 
     void Gravity()
@@ -345,7 +353,7 @@ public class PlayerMovement : MonoBehaviour
 
     float GetModifiedSmoothTime(float smoothTime)
     {
-        if (groundDodging)
+        if (frameData.ActionName == "roll" || frameData.ActionName == "roll2")
         {
             if (groundDodgeSpeedSmooth == 0)
             {

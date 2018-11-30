@@ -46,7 +46,7 @@ public class PlayerAnimation : MonoBehaviour
             anim.SetBool("suddenStop", true);
             wasDashing = false;
         }
-        else if ((movement.InputDir != Vector2.zero) || !charController.isGrounded || movement.Dodging)
+        else if ((movement.InputDir != Vector2.zero) || !charController.isGrounded || frameData.ActionName == "roll")
         {
             anim.SetBool("suddenStop", false);
         }

@@ -92613,7 +92613,7 @@ AnimationClip:
     objectReferenceParameter: {fileID: 11500000, guid: effd9bc22f2a32940ae3c5e028050c3e,
       type: 3}
     floatParameter: 0
-    intParameter: 5
+    intParameter: 1
     messageOptions: 0
   - time: 0.2
     functionName: Frames
@@ -92631,10 +92631,18 @@ AnimationClip:
     floatParameter: 0
     intParameter: 3
     messageOptions: 0
-  - time: 1
-    functionName: EndDodge
+  - time: 0.9166667
+    functionName: Frames
     data: 
-    objectReferenceParameter: {fileID: 11500000, guid: 611b7c13365cf5b41a3882e7b578ee50,
+    objectReferenceParameter: {fileID: 11500000, guid: effd9bc22f2a32940ae3c5e028050c3e,
+      type: 3}
+    floatParameter: 0
+    intParameter: 4
+    messageOptions: 0
+  - time: 1.1666666
+    functionName: Frames
+    data: 
+    objectReferenceParameter: {fileID: 11500000, guid: effd9bc22f2a32940ae3c5e028050c3e,
       type: 3}
     floatParameter: 0
     intParameter: 0
