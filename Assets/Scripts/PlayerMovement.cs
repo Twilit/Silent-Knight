@@ -186,7 +186,7 @@ public class PlayerMovement : MonoBehaviour
 
             charController.Move(velocity * Time.deltaTime);
         }
-        else if (frameData.ActionName == "attack1" || frameData.ActionName == "attack2")
+        else if (frameData.ActionName == "attack1" || frameData.ActionName == "attack2" || frameData.ActionName == "attackRolling")
         {
             float turnSmoothTime = 0.35f;
 
