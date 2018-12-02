@@ -315,17 +315,17 @@ public class PlayerMovement : MonoBehaviour
     {
         if (frameData.ActionName == "roll" || frameData.ActionName == "roll2")
         {           
-            /*
+            
             currentDodgeSpeed = Mathf.SmoothDamp(currentDodgeSpeed, endDodgeSpeed, ref dodgeSmoothVelocity, GetModifiedSmoothTime(dodgeSmoothTime));
 
-            if (currentDodgeSpeed <= (endDodgeSpeed + 0.1))
+            /*if (currentDodgeSpeed <= (endDodgeSpeed + 0.1))
             {
                 EndDodge();
-            }
+            }*/
 
             Vector3 velocity = transform.forward * currentDodgeSpeed + Vector3.up * velocityY;
             charController.Move(velocity * Time.deltaTime);
-            */
+            
 
         }
     }
