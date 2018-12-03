@@ -62,9 +62,9 @@ public class PlayerAttack : MonoBehaviour
             anim.SetInteger("attackNumber", 0);
         }
 
-        if ((!charController.isGrounded) && frameData.ActionName != null)
+        if ((!charController.isGrounded) && frameData.ActionName != null && frameData.ActionName != "roll")
         {
-            CancelAttack();
+            CancelAttack();            
         }
 
         print("action: " + frameData.ActionName + " frameType: " + frameData.FrameType);
