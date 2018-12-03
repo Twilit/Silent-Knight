@@ -466,12 +466,12 @@ MonoBehaviour:
   airControlPercent: 0.65
   dashControlPercent: 0.4
   attackControlPercent: 0.862
-  groundDodgeSpeedSmooth: 0.713
+  groundDodgeSpeedSmooth: 0.913
   moveSpeed: 4
   dashSpeed: 6
   speedSmoothTime: 0.08
-  initialDodgeSpeed: 7
-  endDodgeSpeed: 2.5
+  initialDodgeSpeed: 10
+  endDodgeSpeed: 0
   dodgeSmoothTime: 0.3
 --- !u!114 &390612552
 MonoBehaviour:
