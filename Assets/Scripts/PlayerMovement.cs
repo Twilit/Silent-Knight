@@ -186,7 +186,7 @@ public class PlayerMovement : MonoBehaviour
 
             charController.Move(velocity * Time.deltaTime);
         }
-        else if (frameData.ActionName == "attack1" || frameData.ActionName == "attack2")
+        else if (frameData.ActionName == "attack1" || frameData.ActionName == "attack2" || frameData.ActionName == "attack3")
         {
             float turnSmoothTime = 0.35f;
 
@@ -379,7 +379,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (charController.isGrounded)
         {
-            if (frameData.ActionName == "attack1" || frameData.ActionName == "attack2")
+            if (frameData.ActionName == "attack1" || frameData.ActionName == "attack2" || frameData.ActionName == "attack3")
             {
                 if (attackControlPercent == 0)
                 {

@@ -30,9 +30,10 @@ public class PlayerAttack : MonoBehaviour
      0 Nothing
      1 Neutral First Swing
      2 Neutral Second Swing
-     3 Post Running Swing
+     3 Neutral Third Swing
      4 Post Rolling Swing
-     */ 
+     5 Post Running Swing
+     */
 
     void Start () 
 	{
@@ -100,7 +101,7 @@ public class PlayerAttack : MonoBehaviour
         {
             attackMovement = 5.5f;
             frameData.ActionName = "attackRunning";
-            anim.SetInteger("attackNumber", 3);
+            anim.SetInteger("attackNumber", 5);
         }
         else if ((frameData.ActionName == "roll" && frameData.FrameType == 4)
             || (frameData.ActionName == "roll2" && frameData.FrameType == 4))
@@ -110,7 +111,7 @@ public class PlayerAttack : MonoBehaviour
             anim.SetInteger("attackNumber", 4);
         }
         else if ((frameData.ActionName == null && frameData.FrameType == 0) 
-            || (frameData.ActionName == "attack2" && frameData.FrameType == 4)
+            || (frameData.ActionName == "attack3" && frameData.FrameType == 4)
             || (frameData.ActionName == "attackRunning" && frameData.FrameType == 4))
         {
             attackMovement = 4.5f;
@@ -123,6 +124,12 @@ public class PlayerAttack : MonoBehaviour
             attackMovement = 3f;
             frameData.ActionName = "attack2";
             anim.SetInteger("attackNumber", 2);
+        }
+        else if (frameData.ActionName == "attack2" && frameData.FrameType == 4)
+        {
+            attackMovement = 5f;
+            frameData.ActionName = "attack3";
+            anim.SetInteger("attackNumber", 3);
         }
 
         inputBuffer.BufferedInput = null;
