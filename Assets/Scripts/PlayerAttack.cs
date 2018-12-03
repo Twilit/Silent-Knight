@@ -112,7 +112,8 @@ public class PlayerAttack : MonoBehaviour
         }
         else if ((frameData.ActionName == null && frameData.FrameType == 0) 
             || (frameData.ActionName == "attack3" && frameData.FrameType == 4)
-            || (frameData.ActionName == "attackRunning" && frameData.FrameType == 4))
+            || (frameData.ActionName == "attackRunning" && frameData.FrameType == 4)
+            || (frameData.ActionName == "attack2" && frameData.FrameType == 4))
         {
             attackMovement = 4.5f;
             frameData.ActionName = "attack1";
@@ -125,12 +126,12 @@ public class PlayerAttack : MonoBehaviour
             frameData.ActionName = "attack2";
             anim.SetInteger("attackNumber", 2);
         }
-        else if (frameData.ActionName == "attack2" && frameData.FrameType == 4)
+        /*else if (frameData.ActionName == "attack2" && frameData.FrameType == 4)
         {
             attackMovement = 5f;
             frameData.ActionName = "attack3";
             anim.SetInteger("attackNumber", 3);
-        }
+        }*/
 
         inputBuffer.BufferedInput = null;
     }
