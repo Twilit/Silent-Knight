@@ -76,9 +76,13 @@ public class PlayerAttack : MonoBehaviour
     {
         bool running = false;
 
-        if (frameData.FrameType == 0)
+        if (frameData.FrameType == 0 || 
+            ((frameData.ActionName == "roll" && frameData.FrameType == 4)
+            || (frameData.ActionName == "roll2" && frameData.FrameType == 4)))
         {
-            if (movement.CurrentSpeed >= movement.DashSpeed - 0.1f)
+            if (movement.CurrentSpeed >= movement.DashSpeed - 0.1f
+                || !((frameData.ActionName == "roll" && frameData.FrameType == 4)
+            || (frameData.ActionName == "roll2" && frameData.FrameType == 4)))
             {
                 running = true;
             }

@@ -92639,7 +92639,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 4
     messageOptions: 0
-  - time: 1.1666666
+  - time: 1
     functionName: Frames
     data: 
     objectReferenceParameter: {fileID: 11500000, guid: effd9bc22f2a32940ae3c5e028050c3e,

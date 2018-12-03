@@ -186,7 +186,7 @@ public class PlayerMovement : MonoBehaviour
 
             charController.Move(velocity * Time.deltaTime);
         }
-        else if (frameData.ActionName == "attack1" || frameData.ActionName == "attack2" || frameData.ActionName == "attack3")
+        else if (frameData.ActionName == "attack1" || frameData.ActionName == "attack2" || frameData.ActionName == "attack3" || frameData.ActionName == "attackRolling")
         {
             float turnSmoothTime = 0.35f;
 
@@ -208,7 +208,7 @@ public class PlayerMovement : MonoBehaviour
             Vector3 velocity = transform.forward * attack.AttackMovement + Vector3.up * velocityY;
             charController.Move(velocity * Time.deltaTime);
         }
-        else if (frameData.ActionName == "attackRolling")
+        /*else if (frameData.ActionName == "attackRolling")
         {
             float turnSmoothTime = 0.2f;
 
@@ -221,7 +221,7 @@ public class PlayerMovement : MonoBehaviour
                 Vector3 velocity = transform.forward * attack.AttackMovement + Vector3.up * velocityY;
                 charController.Move(velocity * Time.deltaTime);
             }
-        }
+        }*/
         else if (frameData.ActionName == "roll")
         {
             print("Roll");
