@@ -85,7 +85,7 @@ public class PlayerAttack : MonoBehaviour
 
             movement.CurrentSpeed = 0;
 
-            if (movement.InputDir != Vector2.zero)
+            if (movement.InputDir != Vector2.zero && !running)
             {
                 attackDirection = Mathf.Atan2(movement.InputDir.x, movement.InputDir.y) * Mathf.Rad2Deg;
             }
