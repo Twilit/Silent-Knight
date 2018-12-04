@@ -9,6 +9,7 @@ public class PlayerAttack : MonoBehaviour
     CharacterController charController;
     FrameData frameData;
     PlayerInputBuffer inputBuffer;
+    public GameObject particle;
 
     float attackDirection;
 
@@ -73,7 +74,22 @@ public class PlayerAttack : MonoBehaviour
             CancelAttack();
         }
 
-        //print("action: " + frameData.ActionName + " frameType: " + frameData.FrameType);
+        if ((frameData.ActionName == "attack1"
+            || frameData.ActionName == "attack2"
+            || frameData.ActionName == "attackRunning"
+            || frameData.ActionName == "attackRolling"
+            || frameData.ActionName == "attackMidAir")
+            
+            && frameData.FrameType == 2)
+        {
+            ;
+        }
+        else
+        {
+            ;
+        }
+
+        print("action: " + frameData.ActionName + " frameType: " + frameData.FrameType);
         //print("currentSpeed: " + movement.CurrentSpeed + " dashSpeed: " + movement.DashSpeed);
 	}
 
@@ -95,7 +111,7 @@ public class PlayerAttack : MonoBehaviour
             if (charController.isGrounded)
             {
                 movement.CurrentSpeed = 0;
-                print("not mid air attack");
+
                 if (movement.InputDir != Vector2.zero && !running)
                 {
                     attackDirection = Mathf.Atan2(movement.InputDir.x, movement.InputDir.y) * Mathf.Rad2Deg;
