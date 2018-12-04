@@ -150,7 +150,7 @@ public class PlayerMovement : MonoBehaviour
     {
         float targetRotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg;
 
-        if (frameData.ActionName == null)
+        if (frameData.ActionName == null || (frameData.ActionName == "attackMidAir"))
         {
             Jump();
             Dash();
