@@ -154,7 +154,7 @@ public class PlayerAttack : MonoBehaviour
                 attackMovement = 0f;
                 frameData.ActionName = "attackMidAir";
                 anim.SetInteger("attackNumber", 6);
-                anim.SetLayerWeight(1, 0.95f);
+                //anim.SetLayerWeight(1, 0.95f);
             }
         }
 
@@ -165,6 +165,6 @@ public class PlayerAttack : MonoBehaviour
     {
         frameData.FrameType = 0;
         frameData.ActionName = null;
-        anim.SetLayerWeight(1, 0f);
+        //anim.SetLayerWeight(1, 0f);
     }
 }
