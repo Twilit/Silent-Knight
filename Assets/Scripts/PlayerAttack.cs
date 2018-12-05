@@ -97,6 +97,11 @@ public class PlayerAttack : MonoBehaviour
             //emission.enabled = false;
         }
 
+        /*if (frameData.ActionName != null && frameData.FrameType == 1 && anim.GetFloat("attackNumber") == 0)
+        {
+            CancelAttack();
+        }*/
+
         print("action: " + frameData.ActionName + " frameType: " + frameData.FrameType);
         //print("currentSpeed: " + movement.CurrentSpeed + " dashSpeed: " + movement.DashSpeed);
 	}
