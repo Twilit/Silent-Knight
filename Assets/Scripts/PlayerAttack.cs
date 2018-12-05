@@ -139,6 +139,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 attackMovement = 5.5f;
                 frameData.ActionName = "attackRunning";
+                frameData.FrameType = 1;
                 anim.SetInteger("attackNumber", 5);
             }
             else if ((frameData.ActionName == "roll" && frameData.FrameType == 4)
@@ -146,6 +147,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 attackMovement = 1.5f;
                 frameData.ActionName = "attackRolling";
+                frameData.FrameType = 1;
                 anim.SetInteger("attackNumber", 4);
             }
             else if ((frameData.ActionName == null && frameData.FrameType == 0)
@@ -155,6 +157,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 attackMovement = 4.5f;
                 frameData.ActionName = "attack1";
+                frameData.FrameType = 1;
                 anim.SetInteger("attackNumber", 1);
             }
             else if ((frameData.ActionName == "attack1" && frameData.FrameType == 4)
@@ -162,6 +165,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 attackMovement = 3f;
                 frameData.ActionName = "attack2";
+                frameData.FrameType = 1;
                 anim.SetInteger("attackNumber", 2);
             }
             /*else if (frameData.ActionName == "attack2" && frameData.FrameType == 4)
@@ -177,6 +181,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 attackMovement = 0f;
                 frameData.ActionName = "attackMidAir";
+                frameData.FrameType = 1;
                 anim.SetInteger("attackNumber", 6);
                 //anim.SetLayerWeight(1, 0.95f);
             }
