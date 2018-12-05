@@ -9,7 +9,8 @@ public class PlayerAttack : MonoBehaviour
     CharacterController charController;
     FrameData frameData;
     PlayerInputBuffer inputBuffer;
-    public GameObject particle;
+    public ParticleSystem trails;
+    public ParticleSystem trailsTip;
 
     float attackDirection;
 
@@ -44,6 +45,7 @@ public class PlayerAttack : MonoBehaviour
         charController = GetComponent<CharacterController>();
         frameData = GetComponent<FrameData>();
         inputBuffer = GetComponent<PlayerInputBuffer>();
+        
     }
 	
 	void Update () 
@@ -74,6 +76,8 @@ public class PlayerAttack : MonoBehaviour
             CancelAttack();
         }
 
+        ParticleSystem.EmissionModule emission = trails.emission;
+
         if ((frameData.ActionName == "attack1"
             || frameData.ActionName == "attack2"
             || frameData.ActionName == "attackRunning"
@@ -82,11 +86,15 @@ public class PlayerAttack : MonoBehaviour
             
             && frameData.FrameType == 2)
         {
-            ;
+            trails.Play();
+            trailsTip.Play();
+            //emission.enabled = true;
         }
         else
         {
-            ;
+            trails.Stop();
+            trailsTip.Stop();
+            //emission.enabled = false;
         }
 
         print("action: " + frameData.ActionName + " frameType: " + frameData.FrameType);
