@@ -56,6 +56,7 @@ public class FrameData : MonoBehaviour
         {
             frameType = getFrameType;
         }
+        print("!");
 
         if (actionName != null)
         {
