@@ -391,13 +391,13 @@ public class PlayerMovement : MonoBehaviour
         {
             dustMain.startSize = 2.1f;
         }
-        else if (!dashing && charController.isGrounded && currentSpeed >= moveSpeed - 0.01)
+        else if ((!dashing && charController.isGrounded && currentSpeed >= moveSpeed - 0.01) || velocityY > 3)
         {
             dustMain.startSize = 0.9f;
         }
-        else if (frameData.ActionName == "roll")
+        else if (frameData.ActionName == "roll" || frameData.ActionName == "roll2")
         {
-            dustMain.startSize = 1.2f;
+            dustMain.startSize = 1.6f;
         }
         else //if (!charController.isGrounded)
         {
