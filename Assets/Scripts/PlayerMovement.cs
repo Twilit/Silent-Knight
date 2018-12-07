@@ -10,6 +10,9 @@ public class PlayerMovement : MonoBehaviour
     FrameData frameData;
     PlayerInputBuffer inputBuffer;
 
+    public ParticleSystem runDust;
+    public ParticleSystem landDust;
+
     [SerializeField]
     float jumpHeight = 5.0f;
     [SerializeField]
@@ -25,6 +28,19 @@ public class PlayerMovement : MonoBehaviour
 
     float fallMultiplier = 1;
     bool stepOffLedge;
+
+    public bool StepOffLedge
+    {
+        set
+        {
+            if (value == true && stepOffLedge != value)
+            {
+                landDust.Play();
+            }
+
+            stepOffLedge = value;
+        }
+    }
 
     [SerializeField]
     float moveSpeed = 4.0f;
@@ -144,6 +160,8 @@ public class PlayerMovement : MonoBehaviour
         InitiateDodge(inputDir);
 
         DuringDodge();
+
+        Dust();
     }
 
     void Movement(Vector2 inputDir)
@@ -235,7 +253,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (charController.isGrounded)
             {
-                stepOffLedge = false;
+                StepOffLedge = false;
 
                 float jumpVelocity = Mathf.Sqrt(-2 * gravity * jumpHeight);
                 velocityY = jumpVelocity;
@@ -352,16 +370,38 @@ public class PlayerMovement : MonoBehaviour
         if (charController.isGrounded)
         {
             velocityY = -10;
-            stepOffLedge = true;
+            StepOffLedge = true;
         }
         else if (!charController.isGrounded && stepOffLedge)
         {
             velocityY = 0;
-            stepOffLedge = false;
+            StepOffLedge = false;
         }
         else
         {
             velocityY += gravity * fallMultiplier * Time.deltaTime;
+        }
+    }
+
+    void Dust()
+    {
+        ParticleSystem.MainModule dustMain = runDust.main;
+
+        if ((dashing && charController.isGrounded && currentSpeed >= moveSpeed + 0.01) || (frameData.ActionName == "attackRunning" && (frameData.FrameType == 1 || frameData.FrameType == 2)))
+        {
+            dustMain.startSize = 2.1f;
+        }
+        else if (!dashing && charController.isGrounded && currentSpeed >= moveSpeed - 0.01)
+        {
+            dustMain.startSize = 0.9f;
+        }
+        else if (frameData.ActionName == "roll")
+        {
+            dustMain.startSize = 1.2f;
+        }
+        else //if (!charController.isGrounded)
+        {
+            dustMain.startSize = 0f;
         }
     }
 
