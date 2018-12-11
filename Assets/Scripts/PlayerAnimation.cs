@@ -4,21 +4,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
 public class PlayerAnimation : MonoBehaviour 
 {
+    //-------------------------------------------------------------------------
+    //Variables
+
+    //--------------------------
+    //-Components
+
     Animator anim;
     PlayerMovement movement;
     CharacterController charController;
     PlayerAttack attack;
     FrameData frameData;
 
+    //--------------------------
+
     [SerializeField]
     bool wasDashing;
-	
-	void Start () 
+
+    //-------------------------------------------------------------------------
+    //Functions
+
+    void Start () 
 	{
+        //Referencing components on game object
         anim = GetComponent<Animator>();
         movement = GetComponent<PlayerMovement>();
         charController = GetComponent<CharacterController>();
@@ -28,12 +38,15 @@ public class PlayerAnimation : MonoBehaviour
 
 	void Update () 
 	{
+        //Tells animator vertical air velocity and whether character is on ground
         anim.SetFloat("airVelocityY", movement.VelocityY);
         anim.SetBool("onGround", charController.isGrounded);
 
+        //Sets and smooths speedPercent parameter for smooth transition between idle, moving, running animations
         float animationSpeedPercent = ((movement.Dashing) ? 1 : 0.2f) * movement.InputDir.magnitude;
         anim.SetFloat("speedPercent", animationSpeedPercent, movement.SpeedSmoothTime, Time.deltaTime);
 
+        //Plays suddenStop animation if player, well, suddenly stops after running
         if (movement.CurrentSpeed >= (movement.DashSpeed - 0.1f))
         {
             wasDashing = true;
@@ -54,8 +67,11 @@ public class PlayerAnimation : MonoBehaviour
         }
     }
 
+    //Ends the suddenStop animation
     public void EndStop()
     {
         anim.SetBool("suddenStop", false);
     }
+
+    //-------------------------------------------------------------------------
 }

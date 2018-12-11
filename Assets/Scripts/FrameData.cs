@@ -21,14 +21,26 @@ public class FrameData : MonoBehaviour
     0 = Nothing
     */
 
+    string actionName = null;
+    //Action names
+    /*
+    attack1
+    attack2
+    attackRunning
+    attackRolling
+    attackMidAir
+    roll
+    roll2
+    */
+
+    string currentAction = null;
+
     public int FrameType
     {
         get { return frameType; }
 
         set { frameType = value; }
     }
-
-    string actionName = null;
 
     public string ActionName
     {
@@ -37,16 +49,16 @@ public class FrameData : MonoBehaviour
         set { actionName = value; }
     }
 
-    string currentAction = null;
-
     void Start ()
     {
+        //Referencing components on game object
         movement = GetComponent<PlayerMovement>();
         anim = GetComponent<Animator>();
 	}
 
 	void Update ()
     {
+        //Clear frameType when there should
         if (actionName == null && frameType != 0)
         {
             frameType = 0;
