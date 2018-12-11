@@ -307,7 +307,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //Game decides on whether player is running based on whether he is holding the run button when grounded
         //or based on current speed when in air
-        //"Running" in the air sounds counterintuitive, but this gives player a reason to do a running jump - which sends player further
+        //"Running" in the air sounds counterintuitive, but this gives player a reason to do a running jump - covers more distance
         if (charController.isGrounded && Input.GetButton("Run"))
         {
             dashing = true;
@@ -366,7 +366,7 @@ public class PlayerMovement : MonoBehaviour
                     currentSpeed = 0;
 
                     //Dodges in direction of directional input
-                    //or in direction plaer character is facing if there is no direction input
+                    //or in direction player character is facing if there is no direction input
                     if (inputDir != Vector2.zero)
                     {
                         dodgeDirection = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg;
