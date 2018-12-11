@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿//Kin Long Sha SHA17002700, Solihull College, VR & Games Design 
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +10,7 @@ public class FrameData : MonoBehaviour
     Animator anim;
 
     int frameType = 0;
+    //Types of frame when performing actions
     /*
     1 = Start Up / Unbufferable Recovery
     2 = Active

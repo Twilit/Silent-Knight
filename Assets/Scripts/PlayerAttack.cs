@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿//Kin Long Sha SHA17002700, Solihull College, VR & Games Design 
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,7 +28,7 @@ public class PlayerAttack : MonoBehaviour
     }
 
     /*
-     attackNumber:
+     attackNumber (Animation):
      -2 Second Roll
      -1 Roll
      0 Nothing
