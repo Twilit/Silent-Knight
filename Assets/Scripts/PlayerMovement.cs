@@ -52,6 +52,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     float dodgeSmoothTime = 0.5f;
     [SerializeField]
+    float dashStaminaCost = 5f;
+    [SerializeField]
     float rollStaminaCost = 45f;
 
     //--------------------------
@@ -312,9 +314,12 @@ public class PlayerMovement : MonoBehaviour
         //Game decides on whether player is running based on whether he is holding the run button when grounded
         //or based on current speed when in air
         //"Running" in the air sounds counterintuitive, but this gives player a reason to do a running jump - covers more distance
-        if (charController.isGrounded && Input.GetButton("Run"))
+
+        if (charController.isGrounded && Input.GetButton("Run") && player.CurrentStamina > 0)
         {
             dashing = true;
+
+            player.UseStamina(dashStaminaCost * Time.deltaTime);
         }
         else if (!charController.isGrounded && (currentSpeed >= moveSpeed + 1f))
         {
