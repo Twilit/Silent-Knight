@@ -20,7 +20,7 @@ public class Player : Entity
 
 	void Update ()
     {
-        if (frameData.FrameType == 0 && !(movement.Dashing && charController.isGrounded))
+        if (frameData.FrameType == 0 && charController.isGrounded /*&& !(movement.Dashing && movement.InputDir != Vector2.zero)*/ && !(Input.GetButton("Run") && movement.InputDir != Vector2.zero))
         {
             currentStamina = Regen(staminaPerSec, currentStamina, maxStamina);
         }

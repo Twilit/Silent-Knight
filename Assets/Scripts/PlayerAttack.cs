@@ -122,45 +122,45 @@ public class PlayerAttack : MonoBehaviour
     //Handles all attacks, such as attacking direction, and which attack to do, and setting the movement during that attack
     void Attack()
     {
-        bool running = false;
-
-        //When player is doing nothing or finishing a roll
-        if (frameData.FrameType == 0 || 
-            ((frameData.ActionName == "roll" && frameData.FrameType == 4)
-            || (frameData.ActionName == "roll2" && frameData.FrameType == 4)))
-        {
-            //Checks if player is running for the purposes of whether to do a running attack or not
-            if (movement.CurrentSpeed >= movement.DashSpeed - 0.01f
-                || !((frameData.ActionName == "roll" && frameData.FrameType == 4)
-            || (frameData.ActionName == "roll2" && frameData.FrameType == 4)))
-            {
-                running = true;
-            }            
-
-            if (charController.isGrounded)
-            {
-                //Cancels previous movement
-                movement.CurrentSpeed = 0;
-
-                //Attacks in direction of directional input
-                //or in direction player character is facing if there is no direction input
-                if (movement.InputDir != Vector2.zero && !running)
-                {
-                    attackDirection = Mathf.Atan2(movement.InputDir.x, movement.InputDir.y) * Mathf.Rad2Deg;
-                }
-                else
-                {
-                    attackDirection = transform.eulerAngles.y;
-                }
-
-                transform.eulerAngles = Vector3.up * attackDirection;
-            }
-        }
-
         //If character is grounded and has sufficient stamina
 
         if (player.CurrentStamina > 0)
         {
+            bool running = false;
+
+            //When player is doing nothing or finishing a roll
+            if (frameData.FrameType == 0 ||
+                ((frameData.ActionName == "roll" && frameData.FrameType == 4)
+                || (frameData.ActionName == "roll2" && frameData.FrameType == 4)))
+            {
+                //Checks if player is running for the purposes of whether to do a running attack or not
+                if (movement.CurrentSpeed >= movement.DashSpeed - 0.01f
+                    || !((frameData.ActionName == "roll" && frameData.FrameType == 4)
+                || (frameData.ActionName == "roll2" && frameData.FrameType == 4)))
+                {
+                    running = true;
+                }
+
+                if (charController.isGrounded)
+                {
+                    //Cancels previous movement
+                    movement.CurrentSpeed = 0;
+
+                    //Attacks in direction of directional input
+                    //or in direction player character is facing if there is no direction input
+                    if (movement.InputDir != Vector2.zero && !running)
+                    {
+                        attackDirection = Mathf.Atan2(movement.InputDir.x, movement.InputDir.y) * Mathf.Rad2Deg;
+                    }
+                    else
+                    {
+                        attackDirection = transform.eulerAngles.y;
+                    }
+
+                    transform.eulerAngles = Vector3.up * attackDirection;
+                }
+            }
+
             /*
             attackNumber (Animation):
             -2 Second Roll

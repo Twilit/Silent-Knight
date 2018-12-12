@@ -52,6 +52,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     float dodgeSmoothTime = 0.5f;
     [SerializeField]
+    float jumpStaminaCost = 20f;
+    [SerializeField]
     float dashStaminaCost = 5f;
     [SerializeField]
     float rollStaminaCost = 45f;
@@ -299,12 +301,14 @@ public class PlayerMovement : MonoBehaviour
         //Set vertical velocity to jump velocity when jump button is pressed, and character is grounded
         if (Input.GetButtonDown("Jump"))
         {
-            if (charController.isGrounded)
+            if (charController.isGrounded && player.CurrentStamina > 0)
             {
                 StepOffLedge = false;
 
                 float jumpVelocity = Mathf.Sqrt(-2 * gravity * jumpHeight);
                 velocityY = jumpVelocity;
+
+                player.UseStamina(jumpStaminaCost);
             }
         }
     }
@@ -319,7 +323,10 @@ public class PlayerMovement : MonoBehaviour
         {
             dashing = true;
 
-            player.UseStamina(dashStaminaCost * Time.deltaTime);
+            if (inputDir != Vector2.zero)
+            {
+                player.UseStamina(dashStaminaCost * Time.deltaTime);
+            }            
         }
         else if (!charController.isGrounded && (currentSpeed >= moveSpeed + 1f))
         {

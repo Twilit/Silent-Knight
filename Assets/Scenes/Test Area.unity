@@ -477,6 +477,8 @@ MonoBehaviour:
   initialDodgeSpeed: 10
   endDodgeSpeed: 0
   dodgeSmoothTime: 0.3
+  jumpStaminaCost: 20
+  dashStaminaCost: 15
   rollStaminaCost: 45
 --- !u!114 &390612552
 MonoBehaviour:
