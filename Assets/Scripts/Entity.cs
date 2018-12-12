@@ -31,16 +31,6 @@ public class Entity : MonoBehaviour
         get { return currentStamina; }
     }
 
-    void Start ()
-	{
-        
-	}
-	
-	void Update ()
-	{
-        
-    }
-
     //Does exactly what it says on the tin, used when setting up
     protected void SetHealthStaminaToMax()
     {
@@ -48,8 +38,9 @@ public class Entity : MonoBehaviour
         currentStamina = maxStamina;
     }
 
-    //Regens either health or stamina, mostly stamina
-    //For stamina, should be called in Update(), if entity is in frameType 0
+    //Regens either health or stamina, mostly used for regular stamina recovery
+    //For stamina, should be constantly active, as long as conditions are met for player to be able to regain stamina
+    //For health, unsure, perhaps an item/ability/spell effect
     protected float Regen(float regenRate, float currentValue, float maxValue)
     {
         //Regen stamina when current value is less than max
@@ -68,6 +59,7 @@ public class Entity : MonoBehaviour
         return currentValue;
     }
 
+    //Called when player does action that costs stamina, with the action's stamina cost as parameter
     public void UseStamina(float cost)
     {
         if (currentStamina > 0)
