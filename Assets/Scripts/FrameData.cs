@@ -58,13 +58,15 @@ public class FrameData : MonoBehaviour
 
 	void Update ()
     {
-        //Clear frameType when there should
+        //Clear frameType when it should be 0
         if (actionName == null && frameType != 0)
         {
             frameType = 0;
         }
     }
 
+    //Handles the changing of frameType during animation
+    //Called in animation events
     void Frames(int getFrameType)
     {
         if (!((getFrameType == 0) && frameType != 4)) //Fixes bug that cancels attack when previous attack ends
@@ -72,6 +74,7 @@ public class FrameData : MonoBehaviour
             frameType = getFrameType;
         }
 
+        //Ends action when frameType is changed to 0
         if (actionName != null)
         {
 

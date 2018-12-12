@@ -24,6 +24,7 @@ public class PlayerInputBuffer : MonoBehaviour
     
 	void Update ()
     {
+        //Store input if in frames of animation that allows you to buffer an action
         if ((frameData.FrameType == 2 || frameData.FrameType == 3) && GetInput() != null)
         {
             //bufferedInput = (GetInput() != bufferedInput) ? GetInput() : bufferedInput;
@@ -33,6 +34,7 @@ public class PlayerInputBuffer : MonoBehaviour
         }
 	}
 
+    //Actions you can buffer
     string GetInput()
     {
         if (Input.GetButtonDown("Attack"))
