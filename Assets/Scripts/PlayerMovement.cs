@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     PlayerAttack attack;
     FrameData frameData;
     PlayerInputBuffer inputBuffer;
+    Player player;
 
     //--------------------------
     //-Constants
@@ -50,6 +51,8 @@ public class PlayerMovement : MonoBehaviour
     float endDodgeSpeed = 2.0f;
     [SerializeField]
     float dodgeSmoothTime = 0.5f;
+    [SerializeField]
+    float rollStaminaCost = 45f;
 
     //--------------------------
     //-Not Constants
@@ -162,6 +165,7 @@ public class PlayerMovement : MonoBehaviour
         attack = GetComponent<PlayerAttack>();
         frameData = GetComponent<FrameData>();
         inputBuffer = GetComponent<PlayerInputBuffer>();
+        player = GetComponent<Player>();
     }
 	
 	void Update ()
@@ -347,8 +351,12 @@ public class PlayerMovement : MonoBehaviour
             //When the player character is doing nothing, or in a cancellable part of an animation
             if (frameData.FrameType == 0 || frameData.FrameType == 4)
             {
-                if (charController.isGrounded)
+                //If character is grounded and has sufficient stamina
+                if (charController.isGrounded && player.CurrentStamina > 0)
                 {
+                    //Spends stamina
+                    player.UseStamina(rollStaminaCost);
+                    
                     //Do roll1 when doing nothing or finishing attack etc.
                     //Do roll2 when finishing roll1
                     if (frameData.ActionName == "roll")

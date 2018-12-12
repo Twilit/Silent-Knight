@@ -20,12 +20,14 @@ public class PlayerAttack : MonoBehaviour
     CharacterController charController;
     FrameData frameData;
     PlayerInputBuffer inputBuffer;
+    Player player;
 
     //--------------------------
     //-Movement during Attacks
 
     float attackDirection;
     float attackMovement = 2f;
+    float attackStaminaCost = 0f;
 
     public float AttackDirection
     {
@@ -48,6 +50,7 @@ public class PlayerAttack : MonoBehaviour
         charController = GetComponent<CharacterController>();
         frameData = GetComponent<FrameData>();
         inputBuffer = GetComponent<PlayerInputBuffer>();
+        player = GetComponent<Player>();
         
     }
 	
@@ -112,7 +115,7 @@ public class PlayerAttack : MonoBehaviour
             CancelAttack();
         }*/
 
-        print("action: " + frameData.ActionName + " frameType: " + frameData.FrameType);
+        //print("action: " + frameData.ActionName + " frameType: " + frameData.FrameType);
         //print("currentSpeed: " + movement.CurrentSpeed + " dashSpeed: " + movement.DashSpeed);
 	}
 
@@ -152,9 +155,11 @@ public class PlayerAttack : MonoBehaviour
 
                 transform.eulerAngles = Vector3.up * attackDirection;
             }
-        }    
+        }
 
-        if (charController.isGrounded)
+        //If character is grounded and has sufficient stamina
+
+        if (player.CurrentStamina > 0)
         {
             /*
             attackNumber (Animation):
@@ -169,61 +174,72 @@ public class PlayerAttack : MonoBehaviour
             6 Mid Air Swing
             */
 
-            //RUNNING ATTACK when player is doing nothing but running
-            if (frameData.ActionName == null && movement.Dashing && running)
+            if (charController.isGrounded)
             {
-                attackMovement = 5.5f;
-                frameData.ActionName = "attackRunning";
-                frameData.FrameType = 1;
-                anim.SetInteger("attackNumber", 5);
+                //RUNNING ATTACK when player is doing nothing but running
+                if (frameData.ActionName == null && movement.Dashing && running)
+                {
+                    attackMovement = 5.5f;
+                    attackStaminaCost = 41f;
+                    frameData.ActionName = "attackRunning";
+                    frameData.FrameType = 1;
+                    anim.SetInteger("attackNumber", 5);
+                }
+                //ROLLING ATTACK when player is coming out of a roll
+                else if ((frameData.ActionName == "roll" && frameData.FrameType == 4)
+                    || (frameData.ActionName == "roll2" && frameData.FrameType == 4))
+                {
+                    attackMovement = 1.5f;
+                    attackStaminaCost = 28f;
+                    frameData.ActionName = "attackRolling";
+                    frameData.FrameType = 1;
+                    anim.SetInteger("attackNumber", 4);
+                }
+                //FIRST ATTACK when player is doing nothing, or finishing either the second attack or running attack
+                else if ((frameData.ActionName == null && frameData.FrameType == 0)
+                    || (frameData.ActionName == "attack3" && frameData.FrameType == 4)
+                    || (frameData.ActionName == "attackRunning" && frameData.FrameType == 4)
+                    || (frameData.ActionName == "attack2" && frameData.FrameType == 4))
+                {
+                    attackMovement = 4.5f;
+                    attackStaminaCost = 33f;
+                    frameData.ActionName = "attack1";
+                    frameData.FrameType = 1;
+                    anim.SetInteger("attackNumber", 1);
+                }
+                //SECOND ATTACK when player is finishing either the first attack or rolling attack
+                else if ((frameData.ActionName == "attack1" && frameData.FrameType == 4)
+                    || (frameData.ActionName == "attackRolling" && frameData.FrameType == 4))
+                {
+                    attackMovement = 3f;
+                    attackStaminaCost = 35f;
+                    frameData.ActionName = "attack2";
+                    frameData.FrameType = 1;
+                    anim.SetInteger("attackNumber", 2);
+                }
+                /*else if (frameData.ActionName == "attack2" && frameData.FrameType == 4)
+                {
+                    attackMovement = 5f;
+                    frameData.ActionName = "attack3";
+                    anim.SetInteger("attackNumber", 3);
+                }*/
             }
-            //ROLLING ATTACK when player is coming out of a roll
-            else if ((frameData.ActionName == "roll" && frameData.FrameType == 4)
-                || (frameData.ActionName == "roll2" && frameData.FrameType == 4))
+            //MIDAIR ATTACK when player is in air and doing nothing
+            else
             {
-                attackMovement = 1.5f;
-                frameData.ActionName = "attackRolling";
-                frameData.FrameType = 1;
-                anim.SetInteger("attackNumber", 4);
+                if (frameData.ActionName == null)
+                {
+                    attackMovement = 0f;
+                    attackStaminaCost = 31f;
+                    frameData.ActionName = "attackMidAir";
+                    frameData.FrameType = 1;
+                    anim.SetInteger("attackNumber", 6);
+                    //anim.SetLayerWeight(1, 0.95f);
+                }
             }
-            //FIRST ATTACK when player is doing nothing, or finishing either the second attack or running attack
-            else if ((frameData.ActionName == null && frameData.FrameType == 0)
-                || (frameData.ActionName == "attack3" && frameData.FrameType == 4)
-                || (frameData.ActionName == "attackRunning" && frameData.FrameType == 4)
-                || (frameData.ActionName == "attack2" && frameData.FrameType == 4))
-            {
-                attackMovement = 4.5f;
-                frameData.ActionName = "attack1";
-                frameData.FrameType = 1;
-                anim.SetInteger("attackNumber", 1);
-            }
-            //SECOND ATTACK when player is finishing either the first attack or rolling attack
-            else if ((frameData.ActionName == "attack1" && frameData.FrameType == 4)
-                || (frameData.ActionName == "attackRolling" && frameData.FrameType == 4))
-            {
-                attackMovement = 3f;
-                frameData.ActionName = "attack2";
-                frameData.FrameType = 1;
-                anim.SetInteger("attackNumber", 2);
-            }
-            /*else if (frameData.ActionName == "attack2" && frameData.FrameType == 4)
-            {
-                attackMovement = 5f;
-                frameData.ActionName = "attack3";
-                anim.SetInteger("attackNumber", 3);
-            }*/
-        }
-        //MIDAIR ATTACK when player is in air and doing nothing
-        else
-        {
-            if (frameData.ActionName == null)
-            {
-                attackMovement = 0f;
-                frameData.ActionName = "attackMidAir";
-                frameData.FrameType = 1;
-                anim.SetInteger("attackNumber", 6);
-                //anim.SetLayerWeight(1, 0.95f);
-            }
+
+            //Spends stamina
+            player.UseStamina(attackStaminaCost);
         }
 
         //Empties input buffer as buffered input has been acted upon
