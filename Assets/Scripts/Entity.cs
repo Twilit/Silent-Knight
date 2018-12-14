@@ -24,8 +24,6 @@ public class Entity : MonoBehaviour
     //Poise
     protected float poise = 0;
 
-
-
     public float CurrentStamina
     {
         get { return currentStamina; }
