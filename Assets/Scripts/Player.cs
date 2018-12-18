@@ -15,6 +15,7 @@ public class Player : Entity
         movement = GetComponent<PlayerMovement>();
         charController = GetComponent<CharacterController>();
         //Set up
+        SetStats(800, 150, 40, 230, 120, 0); //Health: 800, Stamina: 150, ATK: 230, DEF: 120, Poise: 0
         SetHealthStaminaToMax();
 	}	
 
@@ -26,6 +27,6 @@ public class Player : Entity
             currentStamina = Regen(staminaPerSec, currentStamina, maxStamina);
         }
 
-        print(currentStamina + "/" + maxStamina);
+        //print(currentStamina + "/" + maxStamina);
     }
 }

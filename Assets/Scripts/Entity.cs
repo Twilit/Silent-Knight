@@ -24,6 +24,11 @@ public class Entity : MonoBehaviour
     //Poise
     protected float poise = 0;
 
+    public float MaxStamina
+    {
+        get { return maxStamina; }
+    }
+
     public float CurrentStamina
     {
         get { return currentStamina; }
@@ -34,6 +39,18 @@ public class Entity : MonoBehaviour
     {
         currentHealth = maxHealth;
         currentStamina = maxStamina;
+    }
+
+    protected void SetStats(int _maxHealth, float _maxStamina, float _staminaPerSec, int _attackPower, int _defence, float _poise)
+    {
+        maxHealth = _maxHealth;
+        maxStamina = _maxStamina;
+        staminaPerSec = _staminaPerSec;
+        attackPower = _attackPower;
+        defence = _defence;
+        poise = _poise;
+
+        //Debug.Log(maxHealth + "/" + maxStamina + "/" + staminaPerSec + "/" + attackPower + "/" + defence + "/" + poise);
     }
 
     //Regens either health or stamina, mostly used for regular stamina recovery
