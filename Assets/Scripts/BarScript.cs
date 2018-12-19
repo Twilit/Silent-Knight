@@ -11,51 +11,50 @@ public class BarScript : MonoBehaviour
     Image backFill;
     [SerializeField]
     Image mainFill;
-
-    float backFillAmount;
     [SerializeField]
-    float backFillDelay = 3f;
-    float backFillTimer;
+    float barMaxDelta = 0.5f;
+
     float mainFillAmount;
+    float baseMax;
     Entity entityStats;
 
     void Start()
     {
         entityStats = entity.GetComponent<Player>();
+        baseMax = entityStats.MaxStamina;
     }
 
 	void LateUpdate () 
 	{
-        CatchUpTimer();
-        UpdateStaminaBar();
+        UpdateBarFill(entityStats.CurrentStamina, entityStats.MaxStamina);
     }
 
-    void UpdateStaminaBar()
+    void UpdateBarFill(float current, float max)
     {
-        print(entityStats.CurrentStamina + "/" + entityStats.MaxStamina);
-
-        mainFillAmount = entityStats.CurrentStamina / entityStats.MaxStamina;
+        //print(current + "/" + max);
+        
+        mainFillAmount = current / max;
 
         if (mainFill.fillAmount != mainFillAmount)
-        {
+        {            
             mainFill.fillAmount = mainFillAmount;
+        }
 
-            if (mainFillAmount < backFillAmount && backFillTimer <= 0)
-            {
-                backFillTimer = backFillDelay;
-            }
-            else if (mainFillAmount > backFillAmount)
-            {
-                backFillAmount = mainFillAmount;
-            }
+        if (mainFillAmount < backFill.fillAmount)
+        {
+            backFill.fillAmount = Mathf.MoveTowards(backFill.fillAmount, mainFillAmount, barMaxDelta * Time.deltaTime);
+        }
+        else
+        {
+            backFill.fillAmount = mainFillAmount;
         }
     }
 
-    void CatchUpTimer()
+    void UpdateBarSize()
     {
-        if (backFillTimer > 0)
+        if (baseMax != entityStats.MaxStamina)
         {
-            backFillTimer -= Time.deltaTime;
-        }        
+
+        }
     }
 }
