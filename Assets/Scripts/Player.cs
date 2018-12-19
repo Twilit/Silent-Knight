@@ -28,5 +28,10 @@ public class Player : Entity
         }
 
         //print(currentStamina + "/" + maxStamina);
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            SetStats(800, 200, 40, 230, 120, 0);
+        }
     }
 }
