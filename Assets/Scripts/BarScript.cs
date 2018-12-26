@@ -70,10 +70,22 @@ public class BarScript : MonoBehaviour
         if (baseMax != entityStats.MaxStamina)
         {
             offset = entityStats.MaxStamina - baseMax;
-            float sizeInc = ((offset / baseMax) * (barRect.sizeDelta.x));
 
+            float sizeInc = ((offset / baseMax) * (barRect.sizeDelta.x));
             barRect.sizeDelta = new Vector2((barRect.sizeDelta.x + sizeInc), barRect.sizeDelta.y);
             barRect.anchoredPosition = new Vector2(barRect.anchoredPosition.x + sizeInc/2, barRect.anchoredPosition.y);
+
+            sizeInc = ((offset / baseMax) * (barMaskRect.sizeDelta.x));
+            barMaskRect.sizeDelta = new Vector2((barMaskRect.sizeDelta.x + sizeInc), barMaskRect.sizeDelta.y);
+            barMaskRect.anchoredPosition = new Vector2(barMaskRect.anchoredPosition.x + sizeInc/2, barMaskRect.anchoredPosition.y);
+
+            sizeInc = ((offset / baseMax) * (backFillRect.sizeDelta.x));
+            backFillRect.sizeDelta = new Vector2((backFillRect.sizeDelta.x + sizeInc), backFillRect.sizeDelta.y);
+            backFillRect.anchoredPosition = new Vector2(backFillRect.anchoredPosition.x + sizeInc / 2, backFillRect.anchoredPosition.y);
+
+            sizeInc = ((offset / baseMax) * (mainFillRect.sizeDelta.x));
+            mainFillRect.sizeDelta = new Vector2((mainFillRect.sizeDelta.x + sizeInc), mainFillRect.sizeDelta.y);
+            mainFillRect.anchoredPosition = new Vector2(mainFillRect.anchoredPosition.x + sizeInc / 2, mainFillRect.anchoredPosition.y);
 
             /*barMaskRect.sizeDelta = new Vector2(barMaskRect.sizeDelta.x + ((offset / baseMax) * (barRect.sizeDelta.x)), barMaskRect.sizeDelta.y);
             barMaskRect.anchoredPosition = new Vector2(barMaskRect.anchoredPosition.x + ((offset / baseMax) * (barRect.sizeDelta.x)) / 2, barMaskRect.anchoredPosition.y);
