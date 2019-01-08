@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4496541, g: 0.49972457, b: 0.5756495, a: 1}
+  m_IndirectSpecularColor: {r: 0.44965398, g: 0.49972397, b: 0.57564926, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -466,8 +466,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 105.02, y: -5.325}
-  m_SizeDelta: {x: 210.04, y: 10.65}
+  m_AnchoredPosition: {x: 103.4, y: -5.325}
+  m_SizeDelta: {x: 207, y: 10.65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &352463559
 MonoBehaviour:
@@ -5889,7 +5889,7 @@ GameObject:
   - component: {fileID: 645708328}
   m_Layer: 5
   m_Name: Stamina Bar
-  m_TagString: Untagged
+  m_TagString: StaminaBar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5910,7 +5910,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 106.54, y: -19}
+  m_AnchoredPosition: {x: 105.04, y: -19}
   m_SizeDelta: {x: 210, y: 12.04}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &645708326
@@ -6999,8 +6999,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 105.02, y: -5.325}
-  m_SizeDelta: {x: 210.04, y: 10.65}
+  m_AnchoredPosition: {x: 103.39999, y: -5.325}
+  m_SizeDelta: {x: 207, y: 10.65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1074260671
 MonoBehaviour:
@@ -7071,8 +7071,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 106.48, y: -5.9}
-  m_SizeDelta: {x: 210.04, y: 10.65}
+  m_AnchoredPosition: {x: 104.6, y: -5.9}
+  m_SizeDelta: {x: 207, y: 10.65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1099567475
 MonoBehaviour:
@@ -7098,7 +7098,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.78431374}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.47058824}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -12130,7 +12130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.78431374}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.47058824}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -16881,9 +16881,10 @@ GameObject:
   - component: {fileID: 1489409355}
   - component: {fileID: 1489409357}
   - component: {fileID: 1489409356}
+  - component: {fileID: 1489409358}
   m_Layer: 5
   m_Name: Health Bar
-  m_TagString: Untagged
+  m_TagString: HealthBar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16941,6 +16942,21 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1489409354}
   m_CullTransparentMesh: 0
+--- !u!114 &1489409358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1489409354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98dd4b7bb230d824281e2baf949498e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entity: {fileID: 390612549}
+  backFill: {fileID: 538700286}
+  mainFill: {fileID: 1047730379}
+  barMaxDelta: 0.6
 --- !u!1 &1542252566
 GameObject:
   m_ObjectHideFlags: 0
@@ -17108,7 +17124,7 @@ RectTransform:
   m_GameObject: {fileID: 1671638655}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0.7, z: 1}
   m_Children:
   - {fileID: 1489409355}
   - {fileID: 645708325}
@@ -17117,7 +17133,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 54.6, y: -57.9}
+  m_AnchoredPosition: {x: 56.1, y: -40.6}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1697444838

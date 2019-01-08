@@ -32,14 +32,28 @@ public class BarScript : MonoBehaviour
         backFillRect = transform.GetChild(0).transform.GetChild(0).GetComponent<RectTransform>();
         mainFillRect = transform.GetChild(0).transform.GetChild(1).GetComponent<RectTransform>();
 
-        baseMax = entityStats.MaxStamina;
+        if (transform.tag == "HealthBar")
+        {
+            baseMax = entityStats.MaxHealth;
+        }
+        else if (transform.tag == "StaminaBar")
+        {
+            baseMax = entityStats.MaxStamina;
+        }        
     }
 
 	void LateUpdate () 
 	{
-        UpdateBarFill(entityStats.CurrentStamina, entityStats.MaxStamina);
-
-        UpdateBarSize();
+        if (transform.tag == "HealthBar")
+        {
+            UpdateBarFill(entityStats.CurrentHealth, entityStats.MaxHealth);
+            UpdateBarSize(entityStats.MaxHealth);
+        }
+        else if (transform.tag == "StaminaBar")
+        {
+            UpdateBarFill(entityStats.CurrentStamina, entityStats.MaxStamina);
+            UpdateBarSize(entityStats.MaxStamina);
+        }         
     }
 
     void UpdateBarFill(float current, float max)
@@ -63,13 +77,13 @@ public class BarScript : MonoBehaviour
         }
     }
 
-    void UpdateBarSize()
+    void UpdateBarSize(float max)
     {
         float offset = 0;
 
-        if (baseMax != entityStats.MaxStamina)
+        if (baseMax != max)
         {
-            offset = entityStats.MaxStamina - baseMax;
+            offset = max - baseMax;
 
             float sizeInc = ((offset / baseMax) * (barRect.sizeDelta.x));
             barRect.sizeDelta = new Vector2((barRect.sizeDelta.x + sizeInc), barRect.sizeDelta.y);
@@ -96,7 +110,7 @@ public class BarScript : MonoBehaviour
             mainFillRect.sizeDelta = new Vector2(mainFillRect.sizeDelta.x + ((offset / baseMax) * (barRect.sizeDelta.x)), mainFillRect.sizeDelta.y);
             mainFillRect.anchoredPosition = new Vector2(mainFillRect.anchoredPosition.x + ((offset / baseMax) * (barRect.sizeDelta.x)) / 2, mainFillRect.anchoredPosition.y);*/
 
-            baseMax = entityStats.MaxStamina;
+            baseMax = max;
         }
     }
 }

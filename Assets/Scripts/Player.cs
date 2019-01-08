@@ -33,5 +33,13 @@ public class Player : Entity
         {
             SetStats(800, 200, 40, 230, 120, 0);
         }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            SetStats(1200, 150, 40, 230, 120, 0);
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            currentHealth -= 100;
+        }
     }
 }

@@ -34,6 +34,16 @@ public class Entity : MonoBehaviour
         get { return currentStamina; }
     }
 
+    public float MaxHealth
+    {
+        get { return maxHealth; }
+    }
+
+    public float CurrentHealth
+    {
+        get { return currentHealth; }
+    }
+
     //Does exactly what it says on the tin, used when setting up
     protected void SetHealthStaminaToMax()
     {
