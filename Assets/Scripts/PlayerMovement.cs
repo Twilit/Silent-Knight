@@ -188,6 +188,9 @@ public class PlayerMovement : MonoBehaviour
         InitiateDodge(inputDir);
         DuringDodge();
 
+        //Handles interaction
+        Interact();
+
         //Handles dust particle effects when moving, running, rolling and at the start of jump
         Dust();
     }
@@ -435,6 +438,11 @@ public class PlayerMovement : MonoBehaviour
         frameData.FrameType = 0;
 
         anim.SetInteger("attackNumber", 0);
+    }
+
+    void Interact()
+    {
+
     }
 
     void Gravity()

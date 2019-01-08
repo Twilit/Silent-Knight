@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : Entity
 {
+    Animator anim;
     FrameData frameData;
     PlayerMovement movement;
     CharacterController charController;
@@ -14,6 +15,7 @@ public class Player : Entity
         frameData = GetComponent<FrameData>();
         movement = GetComponent<PlayerMovement>();
         charController = GetComponent<CharacterController>();
+        anim = GetComponent<Animator>();
         //Set up
         SetStats(800, 150, 40, 230, 120, 0); //Health: 800, Stamina: 150, ATK: 230, DEF: 120, Poise: 0
         SetHealthStaminaToMax();
@@ -39,7 +41,22 @@ public class Player : Entity
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
-            currentHealth -= 100;
+            HealthAdjust("damage", 100);
         }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            HealthAdjust("heal", 100);
+        }
+    }
+
+    public override void HealthAdjust(string type, int amount)
+    {
+        if (type == "damage")
+        {
+            anim.SetInteger("reactNumber", Random.Range(1, 4));
+            anim.SetTrigger("react");
+        }
+
+        base.HealthAdjust(type, amount);
     }
 }

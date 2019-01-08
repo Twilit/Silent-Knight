@@ -34,12 +34,12 @@ public class Entity : MonoBehaviour
         get { return currentStamina; }
     }
 
-    public float MaxHealth
+    public int MaxHealth
     {
         get { return maxHealth; }
     }
 
-    public float CurrentHealth
+    public int CurrentHealth
     {
         get { return currentHealth; }
     }
@@ -90,6 +90,31 @@ public class Entity : MonoBehaviour
         if (currentStamina > 0)
         {
             currentStamina -= cost;
+        }
+    }
+
+    public virtual void HealthAdjust(string type, int amount)
+    {
+        if (type == "damage")
+        {
+            if (currentHealth > 0)
+            {
+                currentHealth -= amount;
+            }
+        }
+        else if (type == "heal")
+        {
+            if (currentHealth > 0 && currentHealth < maxHealth)
+            {
+                if ((currentHealth + amount) > maxHealth)
+                {
+                    currentHealth = maxHealth;
+                }
+                else
+                {
+                    currentHealth += amount;
+                }
+            }
         }
     }
 }

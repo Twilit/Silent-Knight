@@ -115,7 +115,7 @@ public class PlayerAttack : MonoBehaviour
             CancelAttack();
         }*/
 
-        //print("action: " + frameData.ActionName + " frameType: " + frameData.FrameType);
+        print("action: " + frameData.ActionName + " frameType: " + frameData.FrameType);
         //print("currentSpeed: " + movement.CurrentSpeed + " dashSpeed: " + movement.DashSpeed);
 	}
 
@@ -163,6 +163,7 @@ public class PlayerAttack : MonoBehaviour
 
             /*
             attackNumber (Animation):
+            -3 React
             -2 Second Roll
             -1 Roll
             0 Nothing
