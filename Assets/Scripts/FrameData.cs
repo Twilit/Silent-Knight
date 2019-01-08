@@ -31,6 +31,7 @@ public class FrameData : MonoBehaviour
     attackMidAir
     roll
     roll2
+    react
     */
 
     string currentAction = null;

@@ -8,6 +8,7 @@ public class Player : Entity
     FrameData frameData;
     PlayerMovement movement;
     CharacterController charController;
+    PlayerAttack attack;
 
     void Start ()
     {
@@ -55,6 +56,7 @@ public class Player : Entity
         {
             anim.SetInteger("reactNumber", Random.Range(1, 4));
             anim.SetTrigger("react");
+            frameData.ActionName = "react";
         }
 
         base.HealthAdjust(type, amount);

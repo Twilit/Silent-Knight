@@ -163,7 +163,6 @@ public class PlayerAttack : MonoBehaviour
 
             /*
             attackNumber (Animation):
-            -3 React
             -2 Second Roll
             -1 Roll
             0 Nothing
