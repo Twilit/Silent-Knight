@@ -369,6 +369,8 @@ public class PlayerMovement : MonoBehaviour
                 //If character is grounded and has sufficient stamina
                 if (charController.isGrounded && player.CurrentStamina > 0)
                 {
+                    anim.SetInteger("reactNumber", 0);
+
                     //Spends stamina
                     player.UseStamina(rollStaminaCost);
                     
@@ -384,6 +386,8 @@ public class PlayerMovement : MonoBehaviour
                         frameData.ActionName = "roll";
                         anim.SetInteger("attackNumber", -1);
                     }
+
+                    frameData.FrameType = 1;
 
                     //Cancels previous movement
                     currentSpeed = 0;

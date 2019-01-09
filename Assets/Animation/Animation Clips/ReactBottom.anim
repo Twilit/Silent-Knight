@@ -33899,7 +33899,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 1
     messageOptions: 0
-  - time: 0.16666667
+  - time: 0.083333336
     functionName: Frames
     data: 
     objectReferenceParameter: {fileID: 11500000, guid: effd9bc22f2a32940ae3c5e028050c3e,
@@ -33914,4 +33914,12 @@ AnimationClip:
       type: 3}
     floatParameter: 0
     intParameter: 4
+    messageOptions: 0
+  - time: 0.5833333
+    functionName: Frames
+    data: 
+    objectReferenceParameter: {fileID: 11500000, guid: effd9bc22f2a32940ae3c5e028050c3e,
+      type: 3}
+    floatParameter: 0
+    intParameter: 0
     messageOptions: 0

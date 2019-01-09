@@ -84,6 +84,7 @@ public class FrameData : MonoBehaviour
                 actionName = null;
                 currentAction = null;
                 anim.SetInteger("attackNumber", 0);
+                anim.SetInteger("reactNumber", 0);
             }
         }
     }

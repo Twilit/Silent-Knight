@@ -176,6 +176,8 @@ public class PlayerAttack : MonoBehaviour
 
             if (charController.isGrounded)
             {
+                anim.SetInteger("reactNumber", 0);
+
                 //RUNNING ATTACK when player is doing nothing but running
                 if (frameData.ActionName == null && movement.Dashing && running)
                 {
@@ -199,7 +201,8 @@ public class PlayerAttack : MonoBehaviour
                 else if ((frameData.ActionName == null && frameData.FrameType == 0)
                     || (frameData.ActionName == "attack3" && frameData.FrameType == 4)
                     || (frameData.ActionName == "attackRunning" && frameData.FrameType == 4)
-                    || (frameData.ActionName == "attack2" && frameData.FrameType == 4))
+                    || (frameData.ActionName == "attack2" && frameData.FrameType == 4)
+                    || (frameData.ActionName == "react" && frameData.FrameType == 4))
                 {
                     attackMovement = 4.5f;
                     attackStaminaCost = 33f;
