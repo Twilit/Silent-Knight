@@ -10,7 +10,16 @@ public class Player : Entity
     CharacterController charController;
     PlayerAttack attack;
 
+    int reactType;
     List<int> reactList;
+
+    public int ReactType
+    {
+        get
+        {
+            return reactType;
+        }
+    }
 
     void Start ()
     {
@@ -29,7 +38,7 @@ public class Player : Entity
 	void Update ()
     {
         //Regen stamina if no action is being done, character is grounded, and the player is not attempting to run
-        if ((frameData.ActionName == "react" || frameData.FrameType == 0) 
+        if ((frameData.ActionName == "react" || frameData.ActionName == "reactMidAir" || frameData.FrameType == 0) 
             && charController.isGrounded 
             /*&& !(movement.Dashing && movement.InputDir != Vector2.zero)*/ 
             && !(Input.GetButton("Run") && movement.InputDir != Vector2.zero))
@@ -67,21 +76,39 @@ public class Player : Entity
     }
 
     public override void HealthAdjust(string type, int amount)
-    {
-        if (reactList.Count <= 1)
-        {
-            ReactListRefill();
-        }
-
-        int index = Random.Range(1, reactList.Count - 1);
-        int reactType = reactList[index];
-        reactList.RemoveAt(index);
-
+    {              
         if (type == "damage")
         {
+            movement.CurrentSpeed = 0;
+
+            if (charController.isGrounded)
+            {
+                if (reactList.Count <= 1)
+                {
+                    ReactListRefill();
+                }
+
+                int index = Random.Range(1, reactList.Count - 1);
+                reactType = reactList[index];
+                reactList.RemoveAt(index);
+            }
+            else
+            {
+                reactType = 5;
+            }
+
             anim.SetInteger("reactNumber", reactType);
             anim.SetTrigger("react");
-            frameData.ActionName = "react";
+
+            if (charController.isGrounded)
+            {
+                frameData.ActionName = "react";
+            }
+            else
+            {
+                frameData.ActionName = "reactMidAir";
+            }
+            
         }
 
         base.HealthAdjust(type, amount);

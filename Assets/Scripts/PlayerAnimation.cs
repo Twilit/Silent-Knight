@@ -56,12 +56,12 @@ public class PlayerAnimation : MonoBehaviour
             wasDashing = false;
         }
         
-        if ((movement.InputDir == Vector2.zero) && wasDashing)
+        if ((movement.InputDir == Vector2.zero) && wasDashing && frameData.ActionName != "react")
         {
             anim.SetBool("suddenStop", true);
             wasDashing = false;
         }
-        else if ((movement.InputDir != Vector2.zero) || !charController.isGrounded || frameData.ActionName == "roll")
+        else if ((movement.InputDir != Vector2.zero) || !charController.isGrounded || frameData.ActionName == "roll" || frameData.ActionName == "react")
         {
             anim.SetBool("suddenStop", false);
         }

@@ -78,12 +78,12 @@ public class PlayerAttack : MonoBehaviour
         }
 
         //Cancels ground attacks if player moves off ground during attack
-        if ((!charController.isGrounded) && frameData.ActionName != null && frameData.ActionName != "roll" && frameData.ActionName != "attackMidAir")
+        if ((!charController.isGrounded) && frameData.ActionName != null && frameData.ActionName != "roll" && frameData.ActionName != "attackMidAir" && frameData.ActionName != "reactMidAir")
         {
             CancelAttack();            
         }
         //Cancels air attacks when landing
-        else if (charController.isGrounded && frameData.ActionName == "attackMidAir")
+        else if (charController.isGrounded && (frameData.ActionName == "attackMidAir" || frameData.ActionName == "reactMidAir"))
         {
             CancelAttack();
         }

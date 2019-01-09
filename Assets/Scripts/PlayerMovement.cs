@@ -92,6 +92,7 @@ public class PlayerMovement : MonoBehaviour
             if (value == true && stepOffLedge != value)
             {
                 landDust.Play();
+                anim.SetInteger("reactNumber", 0);
             }
 
             stepOffLedge = value;
@@ -203,7 +204,7 @@ public class PlayerMovement : MonoBehaviour
             float targetRotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg;
 
             //When player is either not performing any actions or is using the air attack - and therefore allowed to move freely
-            if (frameData.ActionName == null || (frameData.ActionName == "attackMidAir"))
+            if (frameData.ActionName == null || (frameData.ActionName == "attackMidAir") || (frameData.ActionName == "reactMidAir"))
             {
                 //Handles jumping
                 Jump();
