@@ -181,8 +181,8 @@ public class PlayerAttack : MonoBehaviour
                 //RUNNING ATTACK when player is doing nothing but running
                 if (frameData.ActionName == null && movement.Dashing && running)
                 {
-                    attackMovement = 5.5f;
-                    attackStaminaCost = 41f;
+                    attackMovement = 4.5f; //5.5
+                    attackStaminaCost = 27f;
                     frameData.ActionName = "attackRunning";
                     frameData.FrameType = 1;
                     anim.SetInteger("attackNumber", 5);
@@ -191,8 +191,8 @@ public class PlayerAttack : MonoBehaviour
                 else if ((frameData.ActionName == "roll" && frameData.FrameType == 4)
                     || (frameData.ActionName == "roll2" && frameData.FrameType == 4))
                 {
-                    attackMovement = 1.5f;
-                    attackStaminaCost = 28f;
+                    attackMovement = 0.8f; //1.5
+                    attackStaminaCost = 18f;
                     frameData.ActionName = "attackRolling";
                     frameData.FrameType = 1;
                     anim.SetInteger("attackNumber", 4);
@@ -204,8 +204,8 @@ public class PlayerAttack : MonoBehaviour
                     || (frameData.ActionName == "attack2" && frameData.FrameType == 4)
                     || (frameData.ActionName == "react" && frameData.FrameType == 4))
                 {
-                    attackMovement = 4.5f;
-                    attackStaminaCost = 33f;
+                    attackMovement = 2.5f; //4.5
+                    attackStaminaCost = 23f;
                     frameData.ActionName = "attack1";
                     frameData.FrameType = 1;
                     anim.SetInteger("attackNumber", 1);
@@ -214,8 +214,8 @@ public class PlayerAttack : MonoBehaviour
                 else if ((frameData.ActionName == "attack1" && frameData.FrameType == 4)
                     || (frameData.ActionName == "attackRolling" && frameData.FrameType == 4))
                 {
-                    attackMovement = 3f;
-                    attackStaminaCost = 35f;
+                    attackMovement = 1f; //3
+                    attackStaminaCost = 21f;
                     frameData.ActionName = "attack2";
                     frameData.FrameType = 1;
                     anim.SetInteger("attackNumber", 2);
@@ -233,7 +233,7 @@ public class PlayerAttack : MonoBehaviour
                 if (frameData.ActionName == null)
                 {
                     attackMovement = 0f;
-                    attackStaminaCost = 31f;
+                    attackStaminaCost = 24f;
                     frameData.ActionName = "attackMidAir";
                     frameData.FrameType = 1;
                     anim.SetInteger("attackNumber", 6);
