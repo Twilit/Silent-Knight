@@ -17,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     public ParticleSystem runDust;
     public ParticleSystem landDust;
 
+    public GameObject AtFeet;
+
     CharacterController charController;
     Animator anim;
     PlayerAttack attack;

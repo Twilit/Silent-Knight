@@ -100,7 +100,7 @@ public class Entity : MonoBehaviour
             if (currentHealth > 0)
             {
                 currentHealth -= amount;
-            }
+            }           
         }
         else if (type == "heal")
         {
@@ -116,5 +116,10 @@ public class Entity : MonoBehaviour
                 }
             }
         }
+    }
+
+    public virtual void Death()
+    {
+        gameObject.SetActive(false);
     }
 }

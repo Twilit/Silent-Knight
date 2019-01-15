@@ -15,6 +15,8 @@ public class PlayerAttack : MonoBehaviour
     public ParticleSystem trails;
     public ParticleSystem trailsTip;
 
+    public GameObject allTrails;
+
     Animator anim;
     PlayerMovement movement;
     CharacterController charController;
@@ -51,7 +53,8 @@ public class PlayerAttack : MonoBehaviour
         frameData = GetComponent<FrameData>();
         inputBuffer = GetComponent<PlayerInputBuffer>();
         player = GetComponent<Player>();
-        
+
+        allTrails.SetActive(false);
     }
 	
 	void Update () 
@@ -99,12 +102,16 @@ public class PlayerAttack : MonoBehaviour
             
             && frameData.FrameType == 2)
         {
+            allTrails.SetActive(true);
+
             trails.Play();
             trailsTip.Play();
             //emission.enabled = true;
         }
         else
         {
+            allTrails.SetActive(false);
+
             trails.Stop();
             trailsTip.Stop();
             //emission.enabled = false;
@@ -115,7 +122,7 @@ public class PlayerAttack : MonoBehaviour
             CancelAttack();
         }*/
 
-        print("action: " + frameData.ActionName + " frameType: " + frameData.FrameType);
+        //print("action: " + frameData.ActionName + " frameType: " + frameData.FrameType);
         //print("currentSpeed: " + movement.CurrentSpeed + " dashSpeed: " + movement.DashSpeed);
 	}
 

@@ -26,6 +26,7 @@ public class Player : Entity
         //Referencing components on game object
         frameData = GetComponent<FrameData>();
         movement = GetComponent<PlayerMovement>();
+        attack = GetComponent<PlayerAttack>();
         charController = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
         //Set up
@@ -76,41 +77,57 @@ public class Player : Entity
     }
 
     public override void HealthAdjust(string type, int amount)
-    {              
-        if (type == "damage")
+    {
+        if (!((frameData.ActionName == "roll" || frameData.ActionName == "roll2" ) && frameData.FrameType == 2))
         {
-            movement.CurrentSpeed = 0;
-
-            if (charController.isGrounded)
+            if ((type == "damage") && (CurrentHealth > 0))
             {
-                if (reactList.Count <= 1)
+                movement.CurrentSpeed = 0;
+
+                if (charController.isGrounded)
                 {
-                    ReactListRefill();
+                    if (reactList.Count <= 1)
+                    {
+                        ReactListRefill();
+                    }
+
+                    int index = Random.Range(1, reactList.Count - 1);
+                    reactType = reactList[index];
+                    reactList.RemoveAt(index);
+                }
+                else
+                {
+                    reactType = 5;
                 }
 
-                int index = Random.Range(1, reactList.Count - 1);
-                reactType = reactList[index];
-                reactList.RemoveAt(index);
-            }
-            else
-            {
-                reactType = 5;
+                anim.SetInteger("reactNumber", reactType);
+                anim.SetTrigger("react");
+
+                if (charController.isGrounded)
+                {
+                    frameData.ActionName = "react";
+                }
+                else
+                {
+                    frameData.ActionName = "reactMidAir";
+                }
             }
 
-            anim.SetInteger("reactNumber", reactType);
-            anim.SetTrigger("react");
-
-            if (charController.isGrounded)
-            {
-                frameData.ActionName = "react";
-            }
-            else
-            {
-                frameData.ActionName = "reactMidAir";
-            }
-            
+            base.HealthAdjust(type, amount);
         }
 
-        base.HealthAdjust(type, amount);
+        if (CurrentHealth <= 0)
+        {
+            Death();
+        }
+    }
+
+    public override void Death()
+    {
+        anim.SetTrigger("death");
+
+        movement.enabled = false;
+        attack.enabled = false;
+        movement.AtFeet.SetActive(false);
     }
 }
