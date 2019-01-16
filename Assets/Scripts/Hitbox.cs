@@ -7,15 +7,18 @@ public class Hitbox : MonoBehaviour
     public GameObject player;
 
     PlayerAttack attack;
+    Animator anim;
     FrameData frameData;
 
     List<GameObject> hitEnemies;
+    bool inHitStop;
 
     void Start () 
 	{
         hitEnemies = new List<GameObject>();
 
         attack = player.GetComponent<PlayerAttack>();
+        anim = player.GetComponent<Animator>();
         frameData = player.GetComponent<FrameData>();
 	}	
 
@@ -37,6 +40,13 @@ public class Hitbox : MonoBehaviour
                 hitEnemies.Add(other.gameObject);
 
                 DealHitDamage(other.gameObject);
+
+                if (inHitStop)
+                {
+                    StopCoroutine("HitStop");
+                }
+
+                StartCoroutine("HitStop");
             }
         }
     }
@@ -69,5 +79,22 @@ public class Hitbox : MonoBehaviour
         {
 
         }
+    }
+
+    IEnumerator HitStop()
+    {
+        anim.speed = 0f;
+        inHitStop = true;
+
+        yield return new WaitForSeconds(0.1f);
+
+        for (float i = 0; i < 1; i += 0.1f)
+        {
+            anim.speed = i;
+            yield return new WaitForSeconds(0.017f);
+        }
+
+        anim.speed = 1f;
+        inHitStop = false;
     }
 }

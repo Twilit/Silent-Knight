@@ -251,7 +251,7 @@ public class PlayerMovement : MonoBehaviour
                 Vector3 velocity = transform.forward * currentSpeed + Vector3.up * velocityY;
 
                 //Tells character controller component to move player character based on velocity
-                charController.Move(velocity * Time.deltaTime);
+                charController.Move(velocity * anim.speed * Time.deltaTime);
             }
             //Handles player movement when attacking
             else if (frameData.ActionName == "attack1" || frameData.ActionName == "attack2" || frameData.ActionName == "attack3" || frameData.ActionName == "attackRolling")
@@ -272,7 +272,7 @@ public class PlayerMovement : MonoBehaviour
                 //Move forward slightly during active frames of attack animation 
                 if (frameData.FrameType == 2)
                 {
-                    Vector3 velocity = transform.forward * attack.AttackMovement + Vector3.up * velocityY;
+                    Vector3 velocity = transform.forward * attack.AttackMovement * anim.speed + Vector3.up * velocityY;
                     charController.Move(velocity * Time.deltaTime);
                 }
             }
@@ -280,7 +280,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 //Similar to above except player can't change direction and there is movement up until end of active frames
 
-                Vector3 velocity = transform.forward * attack.AttackMovement + Vector3.up * velocityY;
+                Vector3 velocity = transform.forward * attack.AttackMovement * anim.speed + Vector3.up * velocityY;
                 charController.Move(velocity * Time.deltaTime);
             }
             //Would've made rolling attack a lot quicker when turning during attack, so that player can dodge away and attack the opposite direction.
