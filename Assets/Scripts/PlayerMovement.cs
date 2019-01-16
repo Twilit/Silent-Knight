@@ -264,7 +264,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     //Doesn't turn if the input is opposite to the current direction of character
                     //This is so player can dodge backwards without unwanted turning during attack
-                    if (Quaternion.Angle(Quaternion.Euler(Vector3.up * targetRotation), transform.rotation) < 120)
+                    if ((Quaternion.Angle(Quaternion.Euler(Vector3.up * targetRotation), transform.rotation) < 120) && anim.speed == 1)
                     {
                         transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, GetModifiedSmoothTime(turnSmoothTime));
                     }

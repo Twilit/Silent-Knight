@@ -5,6 +5,8 @@ using UnityEngine;
 public class Hitbox : MonoBehaviour 
 {
     public GameObject player;
+    [SerializeField]
+    GameObject bloodSplatter;
 
     PlayerAttack attack;
     Animator anim;
@@ -38,7 +40,7 @@ public class Hitbox : MonoBehaviour
             if (!hitEnemies.Contains(other.gameObject))
             {
                 hitEnemies.Add(other.gameObject);
-
+                BloodEffect(other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position));
                 DealHitDamage(other.gameObject);
 
                 if (inHitStop)
@@ -81,12 +83,17 @@ public class Hitbox : MonoBehaviour
         }
     }
 
+    void BloodEffect(Vector3 pos)
+    {
+        Instantiate(bloodSplatter, pos, Quaternion.identity);
+    }
+
     IEnumerator HitStop()
     {
         anim.speed = 0f;
         inHitStop = true;
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.05f);
 
         for (float i = 0; i < 1; i += 0.1f)
         {
