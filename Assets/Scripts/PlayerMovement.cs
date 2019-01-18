@@ -467,7 +467,7 @@ public class PlayerMovement : MonoBehaviour
         //Presses player down onto ground when grounded for consistent groundcheck
         if (charController.isGrounded)
         {
-            velocityY = -10;
+            velocityY = -20;
             StepOffLedge = true;
         }
         //Stops grounded dowward force from making player character fall too fast from stepping off ledges
