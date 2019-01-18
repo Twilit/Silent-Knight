@@ -66,7 +66,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 frameData.FrameType = 0;
             }*/
-
+            //print("player presses attack");
             //When the player character is doing nothing, or in a cancellable part of an animation
             if (frameData.FrameType == 0 || frameData.FrameType == 4)
             {

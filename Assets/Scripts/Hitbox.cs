@@ -12,6 +12,7 @@ public class Hitbox : MonoBehaviour
     Animator anim;
     FrameData frameData;
 
+    [SerializeField]
     List<GameObject> hitEnemies;
     bool inHitStop;
 
@@ -26,22 +27,34 @@ public class Hitbox : MonoBehaviour
 
 	void Update () 
 	{	
-        if ((frameData.FrameType == 1) && (hitEnemies.Count != 0))
+        if ((((frameData.FrameType == 1 || frameData.FrameType == 3) && InAttack()) || frameData.ActionName == "" ) && (hitEnemies.Count != 0))
         {
             hitEnemies.Clear();
-            print("reset List");
+            //print("reset List");
         }
 	}
 
+    private void OnTriggerEnter(Collider other)
+    {
+        //print("enter: " + frameData.ActionName);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        //print("exit: " + frameData.ActionName);
+    }
+
     private void OnTriggerStay(Collider other)
     {
+        //print("colliding: " + frameData.ActionName);
+        //Debug.LogWarning("Collided at: " + frameData.FrameType);
         if (frameData.FrameType == 2 && InAttack())
         {
-            if (!hitEnemies.Contains(other.gameObject))
+            if (!hitEnemies.Contains(other.transform.root.gameObject))
             {
-                hitEnemies.Add(other.gameObject);
+                hitEnemies.Add(other.transform.root.gameObject);
                 BloodEffect(other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position));
-                DealHitDamage(other.gameObject);
+                DealHitDamage(other.transform.root.gameObject);
 
                 if (inHitStop)
                 {
@@ -71,7 +84,7 @@ public class Hitbox : MonoBehaviour
 
     void DealHitDamage(GameObject hitEnemy)
     {
-        print("hit");
+        //print("hit");
 
         try
         {
