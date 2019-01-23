@@ -87,13 +87,14 @@ public class PlayerMovement : MonoBehaviour
     //Properties
 
     public bool StepOffLedge
-    {
-        //Landing dust particle effect plays when value is set to true when it wasn't true beforehand
+    {        
         set
         {
             if (value == true && stepOffLedge != value)
             {
+                //Landing dust particle effect plays when value is set to true when it wasn't true beforehand
                 landDust.Play();
+                //Cancel hit reaction when landing onto ground from air
                 anim.SetInteger("reactNumber", 0);
             }
 

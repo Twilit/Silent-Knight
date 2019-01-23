@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Note: https://docs.unity3d.com/ScriptReference/CharacterController-detectCollisions.html
+
 public class Player : Entity
 {
     Animator anim;

@@ -17,12 +17,12 @@ TagManager:
   - 
   - 
   - PostProcessing
-  - PlayerLayer
-  - EnemyLayer
+  - PlayerHurtbox
+  - EnemyHurtbox
   - PlayerHitBox
   - EnemyHitBox
-  - 
-  - 
+  - PlayerLayer
+  - EnemyLayer
   - 
   - 
   - 

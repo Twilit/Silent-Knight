@@ -15,6 +15,7 @@ public class Hitbox : MonoBehaviour
     [SerializeField]
     List<GameObject> hitEnemies;
     bool inHitStop;
+    float lastCollisionTime;
 
     void Start () 
 	{
@@ -37,7 +38,14 @@ public class Hitbox : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //print("enter: " + frameData.ActionName);
+        /*if (Time.time < lastCollisionTime + 0.1f)
+        {
+            return;
+        }
+
+        lastCollisionTime = Time.time;
+
+        print("enter: " + frameData.ActionName);*/
     }
 
     private void OnTriggerExit(Collider other)
