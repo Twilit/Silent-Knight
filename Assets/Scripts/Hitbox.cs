@@ -27,9 +27,10 @@ public class Hitbox : MonoBehaviour
 
 	void Update () 
 	{	
-        if ((((frameData.FrameType == 1 || frameData.FrameType == 3) && InAttack()) || frameData.ActionName == "" ) && (hitEnemies.Count != 0))
+        if ((((frameData.FrameType == 1) && InAttack()) || frameData.ActionName == "" ) && (hitEnemies.Count != 0))
         {
             hitEnemies.Clear();
+            StopCoroutine("HitStop");
             //print("reset List");
         }
 	}

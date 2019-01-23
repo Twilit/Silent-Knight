@@ -65,6 +65,10 @@ public class Player : Entity
         {
             HealthAdjust("heal", 100);
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     void ReactListRefill()
