@@ -5,7 +5,58 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Entity : MonoBehaviour
-{
+{    
+    protected class EntityStats
+    {
+        //Health
+        private int maxHealth = 1000;
+        private int currentHealth;
+
+        //Stamina
+        private float maxStamina = 200f;
+        private float currentStamina;
+        private float staminaPerSec = 40f;
+
+        //Attack
+        private int attackPower = 300;
+
+        //Defence
+        private int defence = 150;
+
+        //Poise
+        private float poise = 0f;
+
+        protected EntityStats(int mHP, int cHP, float mST, float cST, float rST, int AT, int DF, float PS)
+        {
+            maxHealth = mHP;
+            currentHealth = cHP;
+
+            maxStamina = mST;
+            currentStamina = cST;
+            staminaPerSec = rST;
+
+            attackPower = AT;
+            defence = DF;
+
+            poise = PS;
+        }
+
+        protected EntityStats()
+        {
+            maxHealth = 1000;
+            currentHealth = maxHealth;
+
+            maxStamina = 200f;
+            currentStamina = maxStamina;
+            staminaPerSec = 40f;
+
+            attackPower = 300;
+            defence = 150;
+
+            poise = 0f;
+        }
+    }
+    
     //Health
     protected int maxHealth = 1000;
     protected int currentHealth;

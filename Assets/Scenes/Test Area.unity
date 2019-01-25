@@ -493,7 +493,8 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 143490243697866534, guid: ff89a67874cd686439f6f06cdd5f0e49, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: ff89a67874cd686439f6f06cdd5f0e49, type: 2}
   m_IsPrefabAsset: 0
 --- !u!4 &281809909 stripped
@@ -608,6 +609,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1988595750909754, guid: f744fb7332040ad469792f614f0ccf31,
     type: 2}
   m_PrefabInternal: {fileID: 450278898}
+--- !u!114 &390612560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 390612549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d76175d68f897478a501e49161fb40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &403645724
 GameObject:
   m_ObjectHideFlags: 0
@@ -3639,6 +3651,35 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1539067012 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1499158189097702, guid: ff89a67874cd686439f6f06cdd5f0e49,
+    type: 2}
+  m_PrefabInternal: {fileID: 269041574}
+--- !u!136 &1539067014
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1539067012}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0.1, y: 0.98, z: 0.1}
+--- !u!114 &1539067017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1539067012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d76175d68f897478a501e49161fb40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1541850715 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4838419031014112, guid: ff89a67874cd686439f6f06cdd5f0e49,

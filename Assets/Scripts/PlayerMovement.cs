@@ -66,6 +66,7 @@ public class PlayerMovement : MonoBehaviour
     float fallMultiplier = 1;
     bool stepOffLedge;
 
+    Vector3 velocity;
     float speedSmoothVelocity;
     float dodgeSmoothVelocity;
     float turnSmoothVelocity;
@@ -249,7 +250,7 @@ public class PlayerMovement : MonoBehaviour
                 currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedSmoothVelocity, GetModifiedSmoothTime(speedSmoothTime));
 
                 //Set the player's full velocity using their current speed and vertical velocity
-                Vector3 velocity = transform.forward * currentSpeed + Vector3.up * velocityY;
+                velocity = transform.forward * currentSpeed + Vector3.up * velocityY;
 
                 //Tells character controller component to move player character based on velocity
                 charController.Move(velocity * anim.speed * Time.deltaTime);
@@ -273,7 +274,7 @@ public class PlayerMovement : MonoBehaviour
                 //Move forward slightly during active frames of attack animation 
                 if (frameData.FrameType == 2)
                 {
-                    Vector3 velocity = transform.forward * attack.AttackMovement * anim.speed + Vector3.up * velocityY;
+                    velocity = transform.forward * attack.AttackMovement * anim.speed + Vector3.up * velocityY;
                     charController.Move(velocity * Time.deltaTime);
                 }
             }
@@ -281,7 +282,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 //Similar to above except player can't change direction and there is movement up until end of active frames
 
-                Vector3 velocity = transform.forward * attack.AttackMovement * anim.speed + Vector3.up * velocityY;
+                velocity = transform.forward * attack.AttackMovement * anim.speed + Vector3.up * velocityY;
                 charController.Move(velocity * Time.deltaTime);
             }
             //Would've made rolling attack a lot quicker when turning during attack, so that player can dodge away and attack the opposite direction.
@@ -300,6 +301,35 @@ public class PlayerMovement : MonoBehaviour
                     charController.Move(velocity * Time.deltaTime);
                 }
             }*/
+        }
+    }
+
+    //Pushes player out of enemies
+    void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Enemy")
+        {
+            try
+            {
+                //        thePosition = transform.TransformPoint(Vector3.right * 2);
+                //Vector2 playerCentre = transform.TransformPoint(new Vector2(charController.center.x, charController.center.z));                
+                //Vector2 enemyCentre = transform.TransformPoint(new Vector2(other.GetComponent<CapsuleCollider>().center.x, other.GetComponent<CapsuleCollider>().center.z));
+
+                Vector2 playerCentre = new Vector2 (transform.position.x,transform.position.z) + new Vector2(charController.center.x, charController.center.z);
+                Vector2 enemyCentre = new Vector2(other.transform.position.x, other.transform.position.z) + new Vector2(other.GetComponent<CapsuleCollider>().center.x, other.GetComponent<CapsuleCollider>().center.z);
+                //Vector2 enemyCentre = new Vector2(other.GetComponent<CapsuleCollider>().ClosestPointOnBounds(other.transform.position).x, other.GetComponent<CapsuleCollider>().ClosestPointOnBounds(other.transform.position).z);
+
+                Vector2 pushDir = (playerCentre - enemyCentre).normalized;
+                print(pushDir);
+                float pushSpeed = 3.7f;
+                Vector3 pushVelocity = new Vector3(pushDir.x, -3f, pushDir.y) * pushSpeed;
+
+                charController.Move(pushVelocity * Time.deltaTime);
+            }
+            catch
+            {
+                print("No CapsuleCollider on Enemy!");
+            }
         }
     }
 
@@ -434,7 +464,7 @@ public class PlayerMovement : MonoBehaviour
             }*/
 
             //Moves with character controller
-            Vector3 velocity = transform.forward * currentDodgeSpeed + Vector3.up * velocityY;
+            velocity = transform.forward * currentDodgeSpeed + Vector3.up * velocityY;
             charController.Move(velocity * Time.deltaTime);
         }
     }
