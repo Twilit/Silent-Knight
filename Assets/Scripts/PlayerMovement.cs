@@ -71,6 +71,8 @@ public class PlayerMovement : MonoBehaviour
     float dodgeSmoothVelocity;
     float turnSmoothVelocity;
 
+    Vector3 pushVelocity = Vector3.zero;
+
     float currentSpeed;
     float currentDodgeSpeed;
     private float velocityY;
@@ -250,7 +252,7 @@ public class PlayerMovement : MonoBehaviour
                 currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedSmoothVelocity, GetModifiedSmoothTime(speedSmoothTime));
 
                 //Set the player's full velocity using their current speed and vertical velocity
-                velocity = transform.forward * currentSpeed + Vector3.up * velocityY;
+                velocity = (transform.forward * currentSpeed) + (Vector3.up * velocityY) + (pushVelocity);
 
                 //Tells character controller component to move player character based on velocity
                 charController.Move(velocity * anim.speed * Time.deltaTime);
@@ -274,7 +276,7 @@ public class PlayerMovement : MonoBehaviour
                 //Move forward slightly during active frames of attack animation 
                 if (frameData.FrameType == 2)
                 {
-                    velocity = transform.forward * attack.AttackMovement * anim.speed + Vector3.up * velocityY;
+                    velocity = (transform.forward * attack.AttackMovement * anim.speed) + (Vector3.up * velocityY ) + (pushVelocity);
                     charController.Move(velocity * Time.deltaTime);
                 }
             }
@@ -282,7 +284,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 //Similar to above except player can't change direction and there is movement up until end of active frames
 
-                velocity = transform.forward * attack.AttackMovement * anim.speed + Vector3.up * velocityY;
+                velocity = (transform.forward * attack.AttackMovement * anim.speed) + (Vector3.up * velocityY) + (pushVelocity);
                 charController.Move(velocity * Time.deltaTime);
             }
             //Would've made rolling attack a lot quicker when turning during attack, so that player can dodge away and attack the opposite direction.
@@ -304,6 +306,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Enemy")
+        {
+
+        }
+    }
+
     //Pushes player out of enemies
     void OnTriggerStay(Collider other)
     {
@@ -322,14 +332,22 @@ public class PlayerMovement : MonoBehaviour
                 Vector2 pushDir = (playerCentre - enemyCentre).normalized;
                 print(pushDir);
                 float pushSpeed = 3.7f;
-                Vector3 pushVelocity = new Vector3(pushDir.x, -3f, pushDir.y) * pushSpeed;
+                pushVelocity = new Vector3(pushDir.x, -3f, pushDir.y) * pushSpeed;
 
-                charController.Move(pushVelocity * Time.deltaTime);
+                //charController.Move(pushVelocity * Time.deltaTime);
             }
             catch
             {
                 print("No CapsuleCollider on Enemy!");
             }
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Enemy")
+        {
+            pushVelocity = Vector3.zero;
         }
     }
 
@@ -464,7 +482,7 @@ public class PlayerMovement : MonoBehaviour
             }*/
 
             //Moves with character controller
-            velocity = transform.forward * currentDodgeSpeed + Vector3.up * velocityY;
+            velocity = (transform.forward * currentDodgeSpeed) + (Vector3.up * velocityY) + (pushVelocity);
             charController.Move(velocity * Time.deltaTime);
         }
     }

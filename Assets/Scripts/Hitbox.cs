@@ -97,7 +97,7 @@ public class Hitbox : MonoBehaviour
 
         try
         {
-            
+            hitEnemy.GetComponent<Grunt>().HealthAdjust("damage", 20);
         }
         catch
         {
