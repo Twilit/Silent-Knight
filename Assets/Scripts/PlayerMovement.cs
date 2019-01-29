@@ -330,9 +330,9 @@ public class PlayerMovement : MonoBehaviour
                 //Vector2 enemyCentre = new Vector2(other.GetComponent<CapsuleCollider>().ClosestPointOnBounds(other.transform.position).x, other.GetComponent<CapsuleCollider>().ClosestPointOnBounds(other.transform.position).z);
 
                 Vector2 pushDir = (playerCentre - enemyCentre).normalized;
-                print(pushDir);
+                //print(pushDir);
                 float pushSpeed = 3.7f;
-                pushVelocity = new Vector3(pushDir.x, -3f, pushDir.y) * pushSpeed;
+                pushVelocity = new Vector3(pushDir.x, -pushSpeed*2, pushDir.y) * pushSpeed;
 
                 //charController.Move(pushVelocity * Time.deltaTime);
             }

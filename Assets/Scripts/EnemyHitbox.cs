@@ -18,7 +18,7 @@ public class EnemyHitbox : MonoBehaviour
     {
         try
         {
-            other.transform.root.gameObject.GetComponent<Player>().HealthAdjust("damage", 70);
+            other.transform.root.gameObject.GetComponent<Player>().HealthAdjust("damage", 70, Vector3.back);
             print("worked");
         }
         catch

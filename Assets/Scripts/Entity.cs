@@ -144,14 +144,14 @@ public class Entity : MonoBehaviour
         }
     }
 
-    public virtual void HealthAdjust(string type, int amount)
+    public virtual void HealthAdjust(string type, int amount, Vector3 knockback)
     {
         if (type == "damage")
         {
             if (currentHealth > 0)
             {
                 currentHealth -= amount;
-            }           
+            }
         }
         else if (type == "heal")
         {

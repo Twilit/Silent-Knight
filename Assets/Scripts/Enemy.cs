@@ -15,8 +15,8 @@ public class Enemy : Entity
 		
 	}
 
-    public override void HealthAdjust(string type, int amount)
+    public override void HealthAdjust(string type, int amount, Vector3 knockback)
     {
-        base.HealthAdjust(type, amount);
+        base.HealthAdjust(type, amount, knockback);
     }
 }

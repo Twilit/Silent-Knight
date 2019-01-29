@@ -61,11 +61,11 @@ public class Player : Entity
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
-            HealthAdjust("damage", 100);
+            HealthAdjust("damage", 100, Vector3.zero);
         }
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            HealthAdjust("heal", 100);
+            HealthAdjust("heal", 100, Vector3.zero);
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -82,7 +82,7 @@ public class Player : Entity
         }
     }
 
-    public override void HealthAdjust(string type, int amount)
+    public override void HealthAdjust(string type, int amount, Vector3 knockback)
     {
         if (!((frameData.ActionName == "roll" || frameData.ActionName == "roll2" ) && frameData.FrameType == 2))
         {
@@ -119,7 +119,7 @@ public class Player : Entity
                 }
             }
 
-            base.HealthAdjust(type, amount);
+            base.HealthAdjust(type, amount, knockback);
         }
 
         if (CurrentHealth <= 0)
