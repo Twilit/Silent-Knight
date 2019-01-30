@@ -21,6 +21,8 @@ public class Grunt : Enemy
         SetStats(500, 100, 40, 160, 90, 20); //Health: 500, Stamina: 100, ATK: 160, DEF: 90, Poise: 20
         SetHealthStaminaToMax();
 
+        currentState = State.Idle;
+
         ReactListRefill();
     }	
 
@@ -52,7 +54,7 @@ public class Grunt : Enemy
         anim.SetInteger("reactNumber", reactType);
         anim.SetTrigger("react");
 
-        agent.Move(knockback);
+        KnockedBack(knockback);
 
         base.HealthAdjust(type, amount, knockback);
     }
@@ -60,11 +62,20 @@ public class Grunt : Enemy
     void Chase()
     {
         agent.SetDestination(target.position);
-        anim.SetFloat("velocityY", agent.velocity.magnitude, 0.1f, Time.deltaTime);
+        anim.SetFloat("velocityY", agent.velocity.magnitude, 0.2f, Time.deltaTime);
 
         if (agent.remainingDistance < (agent.stoppingDistance + 2.5f))
         {
-            transform.LookAt(target.transform);
+            Vector3 targetDir = (target.position - transform.position);
+
+            targetDir = targetDir / targetDir.magnitude;
+
+            transform.rotation = Quaternion.LookRotation(new Vector3(targetDir.x, 0, targetDir.z));
         }
+    }
+
+    void KnockedBack(Vector3 amount)
+    {
+        agent.Move(amount);
     }
 }

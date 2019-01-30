@@ -97,11 +97,28 @@ public class Hitbox : MonoBehaviour
 
         try
         {
-            hitEnemy.GetComponent<Grunt>().HealthAdjust("damage", 20, Vector3.back);
+            //Knockback sending the enemy away from the player
+            //Vector2 playerCentre = new Vector2(transform.root.position.x, transform.root.position.z) + new Vector2(player.GetComponent<CharacterController>().center.x, player.GetComponent<CharacterController>().center.z);
+            //Vector2 enemyCentre = new Vector2(hitEnemy.transform.position.x, hitEnemy.transform.position.z) + new Vector2(hitEnemy.GetComponent<CapsuleCollider>().center.x, hitEnemy.GetComponent<CapsuleCollider>().center.z);
+
+            //Vector2 knockbackDir = (enemyCentre - playerCentre).normalized;
+
+            //---
+
+            //Knockback sending the enemy in the direction player is facing
+            Vector3 knockbackDir = transform.root.forward;
+
+            float knockbackSpeed = 0.4f;
+
+            //Vector3 knockbackVelocity = new Vector3(knockbackDir.x, 0, knockbackDir.y)* knockbackSpeed;
+
+            Vector3 knockbackVelocity = new Vector3(knockbackDir.x, 0, knockbackDir.z)* knockbackSpeed;
+
+            hitEnemy.GetComponent<Grunt>().HealthAdjust("damage", 20, knockbackVelocity);
         }
         catch
         {
-
+            print("oops");
         }
     }
 

@@ -332,7 +332,7 @@ public class PlayerMovement : MonoBehaviour
                 Vector2 pushDir = (playerCentre - enemyCentre).normalized;
                 //print(pushDir);
                 float pushSpeed = 3.7f;
-                pushVelocity = new Vector3(pushDir.x, -pushSpeed*2, pushDir.y) * pushSpeed;
+                pushVelocity = new Vector3(pushDir.x, (velocityY >= 0)? 0 : -pushSpeed, pushDir.y) * pushSpeed;
 
                 //charController.Move(pushVelocity * Time.deltaTime);
             }
