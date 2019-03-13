@@ -6,7 +6,11 @@ public class Grunt : Enemy
 {
     Animator anim;
     UnityEngine.AI.NavMeshAgent agent;
-    Transform target;
+    public Transform target;
+    Transform player;
+
+    [SerializeField, Range(0,360)]
+    float walkDir;
 
     int reactType;
     List<int> reactList;
@@ -16,7 +20,7 @@ public class Grunt : Enemy
         anim = GetComponent<Animator>();
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
-        target = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
 
         SetStats(500, 100, 40, 160, 90, 20); //Health: 500, Stamina: 100, ATK: 160, DEF: 90, Poise: 20
         SetHealthStaminaToMax();
@@ -59,18 +63,37 @@ public class Grunt : Enemy
         base.HealthAdjust(type, amount, knockback);
     }
 
+    Vector2 DetermineDir(Vector3 velocityDir)
+    {
+        Vector2 faceDir = new Vector2(transform.forward.x, transform.forward.z);
+        /*
+        print (faceDir);
+        moveDir = (Quaternion.Euler(moveDir) * Quaternion.AngleAxis(transform.rotation.y, Vector3.up)).eulerAngles;
+
+        return new Vector2(moveDir.normalized.x, moveDir.normalized.z);*/
+
+        velocityDir = velocityDir.normalized;
+        Vector2 _velocityDir = new Vector2(velocityDir.x, velocityDir.z);
+
+        print(Vector2.SignedAngle(faceDir, _velocityDir));
+
+        float _walkDir = (Vector2.SignedAngle(faceDir, _velocityDir) + 90) * Mathf.Deg2Rad;
+        return new Vector2(Mathf.Cos(_walkDir), Mathf.Sin(_walkDir));
+    }
+
     void Chase()
     {
         agent.SetDestination(target.position);
-        anim.SetFloat("velocityY", agent.velocity.magnitude, 0.2f, Time.deltaTime);
+        anim.SetFloat("velocityY", DetermineDir(agent.velocity).y, 0.2f, Time.deltaTime);
+        anim.SetFloat("velocityX", DetermineDir(agent.velocity).x, 0.2f, Time.deltaTime);
 
-        if (agent.remainingDistance < (agent.stoppingDistance + 2.5f))
+        if (/*agent.remainingDistance < (agent.stoppingDistance + 2.5f)*/ true)
         {
-            Vector3 targetDir = (target.position - transform.position);
+            Vector3 playerDir = (player.position - transform.position);
 
-            targetDir = targetDir / targetDir.magnitude;
+            playerDir = playerDir / playerDir.magnitude;
 
-            transform.rotation = Quaternion.LookRotation(new Vector3(targetDir.x, 0, targetDir.z));
+            transform.rotation = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
         }
     }
 

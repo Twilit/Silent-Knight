@@ -12,7 +12,14 @@ public class Hitbox : MonoBehaviour
     Animator anim;
     FrameData frameData;
 
-    [SerializeField]
+    public bool LandedHit
+    {
+        get
+        {
+            return !(hitEnemies.Count == 0);
+        }
+    }
+
     List<GameObject> hitEnemies;
     bool inHitStop;
     float lastCollisionTime;

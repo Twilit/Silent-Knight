@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     public ParticleSystem landDust;
 
     public GameObject AtFeet;
+    public GameObject sword;
 
     CharacterController charController;
     Animator anim;
@@ -25,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     FrameData frameData;
     PlayerInputBuffer inputBuffer;
     Player player;
+    Hitbox hitbox;
 
     //--------------------------
     //-Constants
@@ -177,6 +179,7 @@ public class PlayerMovement : MonoBehaviour
         frameData = GetComponent<FrameData>();
         inputBuffer = GetComponent<PlayerInputBuffer>();
         player = GetComponent<Player>();
+        hitbox = sword.GetComponent<Hitbox>();
     }
 	
 	void Update ()
@@ -268,13 +271,13 @@ public class PlayerMovement : MonoBehaviour
                 {
                     //Doesn't turn if the input is opposite to the current direction of character
                     //This is so player can dodge backwards without unwanted turning during attack
-                    if ((Quaternion.Angle(Quaternion.Euler(Vector3.up * targetRotation), transform.rotation) < 120) && anim.speed == 1)
+                    if ((Quaternion.Angle(Quaternion.Euler(Vector3.up * targetRotation), transform.rotation) < 150) && anim.speed == 1)
                     {
                         transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, GetModifiedSmoothTime(turnSmoothTime));
                     }
                 }
                 //Move forward slightly during active frames of attack animation 
-                if (frameData.FrameType == 2)
+                if (frameData.FrameType == 2 && !hitbox.LandedHit)
                 {
                     velocity = (transform.forward * attack.AttackMovement * anim.speed) + (Vector3.up * velocityY ) + (pushVelocity);
                     charController.Move(velocity * Time.deltaTime);
