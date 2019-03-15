@@ -75,8 +75,6 @@ public class Grunt : Enemy
         velocityDir = velocityDir.normalized;
         Vector2 _velocityDir = new Vector2(velocityDir.x, velocityDir.z);
 
-        print(Vector2.SignedAngle(faceDir, _velocityDir));
-
         float _walkDir = (Vector2.SignedAngle(faceDir, _velocityDir) + 90) * Mathf.Deg2Rad;
         return new Vector2(Mathf.Cos(_walkDir), Mathf.Sin(_walkDir));
     }
@@ -84,7 +82,7 @@ public class Grunt : Enemy
     void Chase()
     {
         agent.SetDestination(target.position);
-        anim.SetFloat("velocityY", DetermineDir(agent.velocity).y, 0.2f, Time.deltaTime);
+        anim.SetFloat("velocityY", DetermineDir(agent.velocity).y/(agent.velocity.magnitude), 0.2f, Time.deltaTime);
         anim.SetFloat("velocityX", DetermineDir(agent.velocity).x, 0.2f, Time.deltaTime);
 
         if (/*agent.remainingDistance < (agent.stoppingDistance + 2.5f)*/ true)
