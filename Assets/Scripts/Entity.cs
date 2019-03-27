@@ -144,7 +144,7 @@ public class Entity : MonoBehaviour
         }
     }
 
-    public virtual void HealthAdjust(string type, int amount, Vector3 knockback)
+    public virtual void HealthAdjust(string type, int amount)
     {
         if (type == "damage")
         {

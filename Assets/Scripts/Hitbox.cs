@@ -113,15 +113,15 @@ public class Hitbox : MonoBehaviour
             //---
 
             //Knockback sending the enemy in the direction player is facing
-            Vector3 knockbackDir = transform.root.forward;
+            //Vector3 knockbackDir = transform.root.forward;
 
-            float knockbackSpeed = 0.4f;
+            //float knockbackSpeed = 0.4f;
 
             //Vector3 knockbackVelocity = new Vector3(knockbackDir.x, 0, knockbackDir.y)* knockbackSpeed;
 
-            Vector3 knockbackVelocity = new Vector3(knockbackDir.x, 0, knockbackDir.z)* knockbackSpeed;
+            //Vector3 knockbackVelocity = new Vector3(knockbackDir.x, 0, knockbackDir.z)* knockbackSpeed;
 
-            hitEnemy.GetComponent<Grunt>().HealthAdjust("damage", 20, knockbackVelocity);
+            hitEnemy.GetComponent<Grunt>().HealthAdjust("damage", 20);
         }
         catch
         {

@@ -5,15 +5,48 @@ using UnityEngine;
 public class Grunt : Enemy
 {
     Animator anim;
+
     UnityEngine.AI.NavMeshAgent agent;
     public Transform target;
     Transform player;
+    public GameObject detectBox;
 
     [SerializeField, Range(0,360)]
     float walkDir;
 
     int reactType;
     List<int> reactList;
+    bool stunOver;
+
+    public bool StunOver
+    {
+        get
+        {
+            return stunOver;            
+        }
+
+        set
+        {
+            if (stunOver == false && value == true)
+            {
+                stunOver = value;
+                currentState = State.Engaged;
+            }       
+            
+            stunOver = false;
+        }
+    }
+
+    float walkSpeed;
+    float runSpeed;
+
+    public Grunt()
+    {
+        walkSpeed = 1.5f;
+        runSpeed = 3f;
+
+        currentState = State.Idle;
+    }
 
     void Start () 
 	{
@@ -25,15 +58,48 @@ public class Grunt : Enemy
         SetStats(500, 100, 40, 160, 90, 20); //Health: 500, Stamina: 100, ATK: 160, DEF: 90, Poise: 20
         SetHealthStaminaToMax();
 
-        currentState = State.Idle;
-
         ReactListRefill();
     }	
 
 	void Update () 
 	{
-        Chase();
+        GruntAI();
 	}
+
+    void GruntAI()
+    {
+        switch (currentState)
+        {
+            case State.Idle:
+
+                if (detectBox == null)
+                {
+                    currentState = State.Engaged;
+                }
+
+                break;
+
+            case State.Patrol:
+
+                break;
+
+            case State.Engaged:
+
+                MoveTowards();
+
+
+
+                break;
+
+            case State.Chase:
+
+                break;
+
+            case State.Stunned:
+
+                break;
+        }
+    }
 
     void ReactListRefill()
     {
@@ -44,8 +110,10 @@ public class Grunt : Enemy
         }
     }
 
-    public override void HealthAdjust(string type, int amount, Vector3 knockback)
+    public override void HealthAdjust(string type, int amount)
     {
+        currentState = State.Stunned;
+
         if (reactList.Count <= 1)
         {
             ReactListRefill();
@@ -58,9 +126,9 @@ public class Grunt : Enemy
         anim.SetInteger("reactNumber", reactType);
         anim.SetTrigger("react");
 
-        KnockedBack(knockback);
+        //KnockedBack(knockback);
 
-        base.HealthAdjust(type, amount, knockback);
+        base.HealthAdjust(type, amount);
     }
 
     Vector2 DetermineDir(Vector3 velocityDir)
@@ -75,25 +143,25 @@ public class Grunt : Enemy
         velocityDir = velocityDir.normalized;
         Vector2 _velocityDir = new Vector2(velocityDir.x, velocityDir.z);
 
-        print(Vector2.SignedAngle(faceDir, _velocityDir));
+        //print(Vector2.SignedAngle(faceDir, _velocityDir));
 
         float _walkDir = (Vector2.SignedAngle(faceDir, _velocityDir) + 90) * Mathf.Deg2Rad;
         return new Vector2(Mathf.Cos(_walkDir), Mathf.Sin(_walkDir));
     }
 
-    void Chase()
+    void MoveTowards()
     {
         agent.SetDestination(target.position);
-        anim.SetFloat("velocityY", DetermineDir(agent.velocity).y, 0.2f, Time.deltaTime);
-        anim.SetFloat("velocityX", DetermineDir(agent.velocity).x, 0.2f, Time.deltaTime);
+        anim.SetFloat("velocityY", DetermineDir(agent.velocity).y * (agent.velocity.magnitude / agent.speed), 0.05f, Time.deltaTime);
+        anim.SetFloat("velocityX", DetermineDir(agent.velocity).x * (agent.velocity.magnitude / agent.speed), 0.05f, Time.deltaTime);
 
         if (/*agent.remainingDistance < (agent.stoppingDistance + 2.5f)*/ true)
         {
-            Vector3 playerDir = (player.position - transform.position);
+            Vector3 targetDir = (player.position - transform.position);
 
-            playerDir = playerDir / playerDir.magnitude;
+            targetDir = targetDir / targetDir.magnitude;
 
-            transform.rotation = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
+            transform.rotation = Quaternion.LookRotation(new Vector3(targetDir.x, 0, targetDir.z));
         }
     }
 
