@@ -58,22 +58,35 @@ public class Entity : MonoBehaviour
     }
     
     //Health
-    protected int maxHealth = 1000;
+    protected int maxHealth;
     protected int currentHealth;
 
     //Stamina
-    protected float maxStamina = 200f;
+    protected float maxStamina;
     protected float currentStamina;
-    protected float staminaPerSec = 40f;
+    protected float staminaPerSec;
 
     //Attack
-    protected int attackPower = 300;
+    protected int attackPower;
 
     //Defence
-    protected int defence = 150;
+    protected int defence;
 
     //Poise
-    protected float poise = 0;
+    protected float poise;
+
+    //Constructor
+    public Entity()
+    {
+        maxHealth = 1000;
+        maxStamina = 200f;
+        staminaPerSec = 40f;
+
+        attackPower = 300;
+        defence = 300;
+
+        poise = 0;
+    }
 
     public float MaxStamina
     {
