@@ -81,6 +81,11 @@ public class Grunt : Enemy
 
             case State.Patrol:
 
+                if (detectBox == null)
+                {
+                    currentState = State.Engaged;
+                }
+
                 break;
 
             case State.Engaged:
