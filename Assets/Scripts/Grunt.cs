@@ -8,6 +8,7 @@ public class Grunt : Enemy
 
     UnityEngine.AI.NavMeshAgent agent;
     public Transform target;
+    Vector3 destination;
     Transform player;
     public GameObject detectBox;
 
@@ -29,8 +30,12 @@ public class Grunt : Enemy
         {
             if (stunOver == false && value == true)
             {
-                stunOver = value;
-                currentState = State.Engaged;
+                if (!anim.GetCurrentAnimatorStateInfo(0).IsTag("react"))
+                {
+                    stunOver = value;
+                    agent.isStopped = false;
+                    currentState = State.Engaged;
+                }
             }       
             
             stunOver = false;
@@ -64,6 +69,7 @@ public class Grunt : Enemy
 	void Update () 
 	{
         GruntAI();
+        print(currentState);
 	}
 
     void GruntAI()
@@ -74,7 +80,9 @@ public class Grunt : Enemy
 
                 if (detectBox == null)
                 {
-                    currentState = State.Engaged;
+                    SetDestination();
+
+                    currentState = State.Chase;
                 }
 
                 break;
@@ -90,17 +98,37 @@ public class Grunt : Enemy
 
             case State.Engaged:
 
-                MoveTowards();
+                MoveTowardsTarget(target.position);                
 
+                if (agent.remainingDistance > 7f)
+                {
+                    currentState = State.Chase;
+                }
+                else if (agent.remainingDistance < 2f)
+                {
+                    Attack();
+                }
 
+                break;
 
+            case State.Attacking:
+                               
                 break;
 
             case State.Chase:
 
+                RunToPlayer();
+
+                if (agent.remainingDistance < 3f)
+                {
+                    currentState = State.Engaged;
+                }
+
                 break;
 
             case State.Stunned:
+
+                
 
                 break;
         }
@@ -116,8 +144,7 @@ public class Grunt : Enemy
     }
 
     public override void HealthAdjust(string type, int amount)
-    {
-        currentState = State.Stunned;
+    {      
 
         if (reactList.Count <= 1)
         {
@@ -131,9 +158,24 @@ public class Grunt : Enemy
         anim.SetInteger("reactNumber", reactType);
         anim.SetTrigger("react");
 
+        agent.isStopped = true;
+        currentState = State.Stunned;
+
         //KnockedBack(knockback);
 
         base.HealthAdjust(type, amount);
+    }
+
+    void Attack()
+    {
+        agent.isStopped = true;
+        currentState = State.Attacking;
+
+        int move = Random.Range(1, 5);
+
+        anim.SetInteger("attackNumber", move);
+        anim.SetTrigger("attack");
+        print("attack: " + move);
     }
 
     Vector2 DetermineDir(Vector3 velocityDir)
@@ -154,20 +196,43 @@ public class Grunt : Enemy
         return new Vector2(Mathf.Cos(_walkDir), Mathf.Sin(_walkDir));
     }
 
-    void MoveTowards()
+    void MoveTowardsTarget(Vector3 targetPos)
     {
-        agent.SetDestination(target.position);
-        anim.SetFloat("velocityY", DetermineDir(agent.velocity).y * (agent.velocity.magnitude / agent.speed), 0.05f, Time.deltaTime);
-        anim.SetFloat("velocityX", DetermineDir(agent.velocity).x * (agent.velocity.magnitude / agent.speed), 0.05f, Time.deltaTime);
+        agent.speed = 1.5f;
+        agent.SetDestination(targetPos);
 
-        if (/*agent.remainingDistance < (agent.stoppingDistance + 2.5f)*/ true)
-        {
-            Vector3 targetDir = (player.position - transform.position);
+        anim.SetFloat("velocityY", DetermineDir(agent.velocity).y * (agent.velocity.magnitude / agent.speed), 0.02f, Time.deltaTime);
+        anim.SetFloat("velocityX", DetermineDir(agent.velocity).x * (agent.velocity.magnitude / agent.speed), 0.02f, Time.deltaTime);
 
-            targetDir = targetDir / targetDir.magnitude;
+        LookTowardsTarget();
+    }
 
-            transform.rotation = Quaternion.LookRotation(new Vector3(targetDir.x, 0, targetDir.z));
-        }
+    void LookTowardsTarget()
+    {
+        Vector3 targetDir = (player.position - transform.position);
+
+        targetDir = targetDir / targetDir.magnitude;
+
+        Vector3 newDir = Vector3.RotateTowards(transform.forward, new Vector3(targetDir.x, 0, targetDir.z), 4f * Time.deltaTime, 0.0f);
+
+        transform.rotation = Quaternion.LookRotation(newDir);
+    }
+
+    void RunToPlayer()
+    {
+        anim.SetFloat("velocityY", 2, 0.05f, Time.deltaTime);
+
+        agent.speed = 3f;
+        agent.SetDestination(player.position);
+
+        LookTowardsTarget();
+    }
+
+    void SetDestination()
+    {
+        //Vector2 offset = Random.insideUnitCircle;
+
+        destination = target.position; //+ new Vector3(offset.x, 0, offset.y);
     }
 
     void KnockedBack(Vector3 amount)

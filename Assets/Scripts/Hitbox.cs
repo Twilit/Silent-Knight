@@ -101,7 +101,7 @@ public class Hitbox : MonoBehaviour
     void DealHitDamage(GameObject hitEnemy)
     {
         //print("hit");
-
+        
         try
         {
             //Knockback sending the enemy away from the player

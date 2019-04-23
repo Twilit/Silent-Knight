@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Enemy : Entity
 {
-    protected enum State { Idle, Patrol, Chase, Engaged, Stunned };
+    protected enum State { Idle, Patrol, Chase, Engaged, Stunned, Attacking };
 
     protected State currentState;
 
