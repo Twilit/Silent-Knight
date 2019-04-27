@@ -46,7 +46,15 @@ public class Grunt : Enemy
 
     public bool AttackOver
     {
+        get
+        {
+            return attackOver;
+        }
 
+        set
+        {
+
+        }
     }
 
     float walkSpeed;
