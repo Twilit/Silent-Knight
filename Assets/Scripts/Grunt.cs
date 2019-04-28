@@ -53,7 +53,17 @@ public class Grunt : Enemy
 
         set
         {
+            if (attackOver == false && value == true)
+            {
+                if (!anim.GetCurrentAnimatorStateInfo(0).IsTag("attack"))
+                {
+                    attackOver = value;
+                    agent.isStopped = false;
+                    currentState = State.Engaged;
+                }
+            }
 
+            attackOver = false;
         }
     }
 
@@ -84,7 +94,6 @@ public class Grunt : Enemy
 	void Update () 
 	{
         GruntAI();
-        print(currentState);
 	}
 
     void GruntAI()
@@ -115,13 +124,13 @@ public class Grunt : Enemy
 
                 MoveTowardsTarget(target.position);                
 
-                if (agent.remainingDistance > 7f)
+                if (agent.remainingDistance > 5f)
                 {
                     currentState = State.Chase;
                 }
-                else if (agent.remainingDistance < 2f)
+                else if (agent.remainingDistance < 1f)
                 {
-                    Attack();
+                    currentState = State.Engaged;
                 }
 
                 break;
@@ -134,9 +143,9 @@ public class Grunt : Enemy
 
                 RunToPlayer();
 
-                if (agent.remainingDistance < 3f)
+                if (agent.remainingDistance < 1.5f)
                 {
-                    currentState = State.Engaged;
+                    Attack();
                 }
 
                 break;
