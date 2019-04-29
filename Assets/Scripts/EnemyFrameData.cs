@@ -6,7 +6,10 @@ public class EnemyFrameData : MonoBehaviour
 {
     int eFrameType;
     Grunt grunt;
+    AudioSource audio;
 
+    [SerializeField]
+    AudioClip melee;
     [SerializeField]
     GameObject footHitBox;
     [SerializeField]
@@ -20,7 +23,30 @@ public class EnemyFrameData : MonoBehaviour
     {
         get { return eFrameType; }
 
-        set { eFrameType = value; }
+        set
+        {
+            if (value == 2 && eFrameType != 2)
+            {
+                if (grunt.move != 3)
+                {
+                    HitboxActive(true, axeHitBox);
+
+                    audio.clip = melee;
+                    audio.Play();
+                }
+                else
+                {
+                    HitboxActive(true, footHitBox);
+                }
+            }
+            else if (value != 2)
+            {
+                HitboxActive(false, axeHitBox);
+                HitboxActive(false, footHitBox);
+            }
+
+            eFrameType = value;
+        }
     }
 
     void EFrames(int getEFrameType)
@@ -43,25 +69,11 @@ public class EnemyFrameData : MonoBehaviour
     private void Start()
     {
         grunt = GetComponent<Grunt>();
+        audio = GetComponent<AudioSource>();
     }
 
     private void Update()
     {
-        if (EFrameType == 2)
-        {
-            if (grunt.move != 3)
-            {
-                HitboxActive(true, axeHitBox);
-            }
-            else
-            {
-                HitboxActive(true, footHitBox);
-            }
-        }
-        else
-        {
-            HitboxActive(false, axeHitBox);
-            HitboxActive(false, footHitBox);
-        }
+
     }
 }

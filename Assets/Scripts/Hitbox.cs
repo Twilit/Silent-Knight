@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class Hitbox : MonoBehaviour 
 {
+    [SerializeField]
+    AudioClip hit1;
+    [SerializeField]
+    AudioClip hit2;
+    [SerializeField]
+    AudioClip hit3;
+
+    AudioSource audio;
+
     public GameObject player;
     [SerializeField]
     GameObject bloodSplatter;
@@ -31,6 +40,8 @@ public class Hitbox : MonoBehaviour
         attack = player.GetComponent<PlayerAttack>();
         anim = player.GetComponent<Animator>();
         frameData = player.GetComponent<FrameData>();
+
+        audio = GetComponent<AudioSource>();
 	}	
 
 	void Update () 
@@ -72,6 +83,23 @@ public class Hitbox : MonoBehaviour
                 BloodEffect(other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position));
                 DealHitDamage(other.transform.root.gameObject);
 
+                int hitSound = Random.Range(1, 3);
+    
+                if (hitSound == 1)
+                {
+                    audio.clip = hit1;
+                }
+                else if (hitSound == 2)
+                {
+                    audio.clip = hit2;
+                }
+                else if (hitSound == 3)
+                {
+                    audio.clip = hit3;
+                }
+
+                audio.Play();
+
                 if (inHitStop)
                 {
                     StopCoroutine("HitStop");
@@ -100,8 +128,6 @@ public class Hitbox : MonoBehaviour
 
     void DealHitDamage(GameObject hitEnemy)
     {
-        //print("hit");
-        
         try
         {
             //Knockback sending the enemy away from the player
@@ -125,7 +151,7 @@ public class Hitbox : MonoBehaviour
         }
         catch
         {
-            print("oops");
+            print(hitEnemy);
         }
     }
 

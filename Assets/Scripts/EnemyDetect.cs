@@ -19,7 +19,7 @@ public class EnemyDetect : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

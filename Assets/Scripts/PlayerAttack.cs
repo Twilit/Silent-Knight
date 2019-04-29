@@ -24,6 +24,11 @@ public class PlayerAttack : MonoBehaviour
     PlayerInputBuffer inputBuffer;
     Player player;
 
+    AudioSource audio;
+
+    [SerializeField]
+    AudioClip slash;
+
     //--------------------------
     //-Movement during Attacks
 
@@ -53,6 +58,7 @@ public class PlayerAttack : MonoBehaviour
         frameData = GetComponent<FrameData>();
         inputBuffer = GetComponent<PlayerInputBuffer>();
         player = GetComponent<Player>();
+        audio = GetComponent<AudioSource>();
 
         allTrails.SetActive(false);
     }
@@ -104,6 +110,12 @@ public class PlayerAttack : MonoBehaviour
         {
             allTrails.SetActive(true);
 
+            if (!(audio.clip == slash && audio.isPlaying))
+            {
+                audio.clip = slash;
+                audio.Play();
+            }
+
             trails.Play();
             trailsTip.Play();
             //emission.enabled = true;
@@ -133,6 +145,8 @@ public class PlayerAttack : MonoBehaviour
 
         if (player.CurrentStamina > 0)
         {
+
+
             bool running = false;
 
             //When player is doing nothing or finishing a roll

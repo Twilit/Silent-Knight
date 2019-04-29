@@ -6,6 +6,10 @@ using UnityEngine;
 
 public class Player : Entity
 {
+    public GameObject deathPanel;
+
+    GameController gameController;
+
     Animator anim;
     FrameData frameData;
     PlayerMovement movement;
@@ -25,6 +29,8 @@ public class Player : Entity
 
     void Start ()
     {
+        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+
         //Referencing components on game object
         frameData = GetComponent<FrameData>();
         movement = GetComponent<PlayerMovement>();
@@ -32,7 +38,7 @@ public class Player : Entity
         charController = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
         //Set up
-        SetStats(800, 150, 40, 230, 120, 0); //Health: 800, Stamina: 150, ATK: 230, DEF: 120, Poise: 0
+        SetStats(600 + (gameController.healthUpgradeLevel * 150), 150 + (gameController.staminaUpgradeLevel * 10), 40, 230, 120, 0); ; //Health: 600, Stamina: 150, ATK: 230, DEF: 120, Poise: 0
         SetHealthStaminaToMax();
 
         ReactListRefill();
@@ -50,7 +56,7 @@ public class Player : Entity
         }
 
         //print(currentStamina + "/" + maxStamina);
-
+        /*
         if (Input.GetKeyDown(KeyCode.Q))
         {
             SetStats(800, 200, 40, 230, 120, 0);
@@ -67,6 +73,7 @@ public class Player : Entity
         {
             HealthAdjust("heal", 100);
         }
+        */
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
@@ -135,5 +142,23 @@ public class Player : Entity
         movement.enabled = false;
         attack.enabled = false;
         movement.AtFeet.SetActive(false);
+
+        StartCoroutine("Respawn");
+    }
+
+    public void Upgrade()
+    {
+        SetStats(600 + (gameController.healthUpgradeLevel * 150), 150 + (gameController.staminaUpgradeLevel * 10), 40, 230, 120, 0);
+    }
+
+    IEnumerator Respawn()
+    {
+        yield return new WaitForSeconds(1f);
+
+        deathPanel.SetActive(true);
+
+        yield return new WaitForSeconds(3f);
+
+        gameController.ResetLevel();
     }
 }

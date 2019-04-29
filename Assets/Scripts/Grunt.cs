@@ -6,6 +6,11 @@ public class Grunt : Enemy
 {
     public int move;
 
+    [SerializeField]
+    GameObject healthRestorePickUp;
+    [SerializeField]
+    Transform spawnItemPoint;
+
     Animator anim;
     EnemyFrameData eframe;
 
@@ -101,7 +106,7 @@ public class Grunt : Enemy
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        SetStats(1000, 100, 40, 160, 90, 100); //Health: 500, Stamina: 100, ATK: 160, DEF: 90, Poise: 20
+        SetStats(600, 100, 40, 160, 90, 80); //Health: 500, Stamina: 100, ATK: 160, DEF: 90, Poise: 100
         SetHealthStaminaToMax();
 
         currentPoise = poise;
@@ -112,7 +117,6 @@ public class Grunt : Enemy
 	void Update () 
 	{
         GruntAI();
-        print(currentState);
 	}
 
     void GruntAI()
@@ -121,7 +125,7 @@ public class Grunt : Enemy
         {
             case State.Idle:
 
-                if (detectBox == null)
+                if (detectBox.activeInHierarchy == false)
                 {
                     SetDestination();
 
@@ -238,11 +242,7 @@ public class Grunt : Enemy
 
         if (currentHealth <= 0)
         {
-            anim.SetTrigger("die");            
-            agent.isStopped = true;
-            agent.enabled = false;
-            GetComponent<CapsuleCollider>().enabled = false;
-            enabled = false;
+            Death();
         }
         else
         {
@@ -272,6 +272,42 @@ public class Grunt : Enemy
                 currentState = State.Stunned;
             }
         }      
+    }
+
+    void Death()
+    {
+        if (gameObject.tag != "dead")
+        {
+            anim.SetTrigger("die");
+
+            Instantiate(healthRestorePickUp, spawnItemPoint.transform.position, Quaternion.Euler(-90, 0, 0));
+
+            gameObject.tag = "Dead";
+            agent.isStopped = true;
+            agent.enabled = false;
+            GetComponent<CapsuleCollider>().enabled = false;
+            enabled = false;
+        }
+    }
+
+    public void Respawn()
+    {
+        SetStats(600, 100, 40, 160, 90, 80);
+        SetHealthStaminaToMax();
+
+        anim.SetTrigger("undie");
+        detectBox.SetActive(true);
+        currentState = State.Idle;
+        agent.enabled = true;
+        GetComponent<CapsuleCollider>().enabled = true;  
+        gameObject.tag = "Enemy";
+        agent.isStopped = false;     
+    }
+
+    public void Teleport(Transform posrot)
+    {
+        agent.Warp(posrot.position);
+        transform.rotation = posrot.rotation;
     }
 
     void Attack()

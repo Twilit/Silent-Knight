@@ -34,11 +34,11 @@ public class BarScript : MonoBehaviour
 
         if (transform.tag == "HealthBar")
         {
-            baseMax = entityStats.MaxHealth;
+            baseMax = 600; //entityStats.MaxHealth;
         }
         else if (transform.tag == "StaminaBar")
         {
-            baseMax = entityStats.MaxStamina;
+            baseMax = 150; //entityStats.MaxStamina;
         }        
     }
 

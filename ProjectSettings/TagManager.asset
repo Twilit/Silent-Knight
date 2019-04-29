@@ -7,6 +7,9 @@ TagManager:
   - HealthBar
   - StaminaBar
   - Enemy
+  - Dead
+  - Shortcut
+  - EndDoor
   layers:
   - Default
   - TransparentFX
@@ -23,7 +26,7 @@ TagManager:
   - EnemyHitBox
   - PlayerLayer
   - EnemyLayer
-  - 
+  - PortalLayer
   - 
   - 
   - 
