@@ -128,7 +128,7 @@ public class Player : Entity
         }
     }
 
-    public override void Death()
+    public void Death()
     {
         anim.SetTrigger("death");
 

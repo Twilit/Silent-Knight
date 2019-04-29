@@ -107746,21 +107746,22 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.25
-    functionName: 
+    functionName: EFrames
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11500000, guid: fd47ad5c252783f4cade8186a2456281,
+      type: 3}
     floatParameter: 0
-    intParameter: 0
+    intParameter: 1
     messageOptions: 0
   - time: 0.6666667
-    functionName: 
+    functionName: EFrames
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
-    intParameter: 0
+    intParameter: 2
     messageOptions: 0
   - time: 1.1666666
-    functionName: 
+    functionName: EFrames
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

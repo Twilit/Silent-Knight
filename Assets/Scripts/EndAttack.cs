@@ -19,6 +19,7 @@ public class EndAttack : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.gameObject.GetComponent<Grunt>().AttackOver = true;
+        animator.gameObject.GetComponent<EnemyFrameData>().EFrameType = 0;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

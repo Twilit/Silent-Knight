@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class Grunt : Enemy
 {
+    public int move;
+
     Animator anim;
+    EnemyFrameData eframe;
 
     UnityEngine.AI.NavMeshAgent agent;
     public Transform target;
@@ -17,28 +20,32 @@ public class Grunt : Enemy
 
     int reactType;
     List<int> reactList;
-    bool stunOver;
+    bool stunAnimationOver;
+    float stunTimer = 0;
 
-    public bool StunOver
+    float currentPoise;
+
+    public bool StunAnimationOver
     {
         get
         {
-            return stunOver;            
+            return stunAnimationOver;            
         }
 
         set
         {
-            if (stunOver == false && value == true)
+            if (stunAnimationOver == false && value == true)
             {
                 if (!anim.GetCurrentAnimatorStateInfo(0).IsTag("react"))
                 {
-                    stunOver = value;
-                    agent.isStopped = false;
-                    currentState = State.Engaged;
+                    stunAnimationOver = value;
+
+                    anim.SetFloat("velocityX", 0);
+                    anim.SetFloat("velocityY", 0);
                 }
             }       
             
-            stunOver = false;
+            stunAnimationOver = false;
         }
     }
 
@@ -58,8 +65,16 @@ public class Grunt : Enemy
                 if (!anim.GetCurrentAnimatorStateInfo(0).IsTag("attack"))
                 {
                     attackOver = value;
-                    agent.isStopped = false;
-                    currentState = State.Engaged;
+
+                    anim.SetFloat("velocityX", 0);
+                    anim.SetFloat("velocityY", 0);
+
+                    if (currentState == State.Attacking)
+                    {
+                        agent.speed = 1.5f;
+                        agent.SetDestination(player.position);
+                        currentState = State.Engaged;
+                    }                    
                 }
             }
 
@@ -81,12 +96,15 @@ public class Grunt : Enemy
     void Start () 
 	{
         anim = GetComponent<Animator>();
+        eframe = GetComponent<EnemyFrameData>();
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        SetStats(500, 100, 40, 160, 90, 20); //Health: 500, Stamina: 100, ATK: 160, DEF: 90, Poise: 20
+        SetStats(1000, 100, 40, 160, 90, 100); //Health: 500, Stamina: 100, ATK: 160, DEF: 90, Poise: 20
         SetHealthStaminaToMax();
+
+        currentPoise = poise;
 
         ReactListRefill();
     }	
@@ -94,6 +112,7 @@ public class Grunt : Enemy
 	void Update () 
 	{
         GruntAI();
+        print(currentState);
 	}
 
     void GruntAI()
@@ -106,7 +125,7 @@ public class Grunt : Enemy
                 {
                     SetDestination();
 
-                    currentState = State.Chase;
+                    currentState = State.Alerted;
                 }
 
                 break;
@@ -114,6 +133,17 @@ public class Grunt : Enemy
             case State.Patrol:
 
                 if (detectBox == null)
+                {
+                    currentState = State.Engaged;
+                }
+
+                break;
+
+            case State.Alerted:
+                
+                RunToPlayer();
+
+                if (agent.remainingDistance < 2f)
                 {
                     currentState = State.Engaged;
                 }
@@ -128,22 +158,32 @@ public class Grunt : Enemy
                 {
                     currentState = State.Chase;
                 }
-                else if (agent.remainingDistance < 1f)
+                else if (agent.remainingDistance < 1.3f && TargetInFront())
                 {
-                    currentState = State.Engaged;
+                    Attack();
                 }
 
                 break;
 
             case State.Attacking:
-                               
+
+                if (eframe.EFrameType == 1)
+                {
+                    LookTowardsTarget();
+                }
+                else if (eframe.EFrameType == 2)
+                {
+                    //agent.Move(transform.forward * 2f * Time.deltaTime);
+                    //print("in ft2");                    
+                }
+
                 break;
 
             case State.Chase:
 
                 RunToPlayer();
 
-                if (agent.remainingDistance < 1.5f)
+                if (agent.remainingDistance < 1.3f && TargetInFront())
                 {
                     Attack();
                 }
@@ -152,7 +192,16 @@ public class Grunt : Enemy
 
             case State.Stunned:
 
-                
+                if (stunTimer > 0)
+                {
+                    stunTimer -= Time.deltaTime;
+                }
+                else if (stunTimer <= 0)
+                {
+                    agent.SetDestination(player.position);
+
+                    currentState = State.Engaged;
+                }
 
                 break;
         }
@@ -167,39 +216,74 @@ public class Grunt : Enemy
         }
     }
 
-    public override void HealthAdjust(string type, int amount)
-    {      
+    bool TargetInFront()
+    {
+        Vector3 heading = target.position - transform.position;
 
-        if (reactList.Count <= 1)
+        float dot = Vector3.Dot(heading, transform.forward);
+
+        if (dot > 0.5f)
         {
-            ReactListRefill();
+            return true;
         }
+        else
+        {
+            return false;
+        }
+    }
 
-        int index = Random.Range(1, reactList.Count - 1);
-        reactType = reactList[index];
-        reactList.RemoveAt(index);
-
-        anim.SetInteger("reactNumber", reactType);
-        anim.SetTrigger("react");
-
-        agent.isStopped = true;
-        currentState = State.Stunned;
-
-        //KnockedBack(knockback);
-
+    public override void HealthAdjust(string type, int amount)
+    {
         base.HealthAdjust(type, amount);
+
+        if (currentHealth <= 0)
+        {
+            anim.SetTrigger("die");            
+            agent.isStopped = true;
+            agent.enabled = false;
+            GetComponent<CapsuleCollider>().enabled = false;
+            enabled = false;
+        }
+        else
+        {
+            if (stunTimer <= 0)
+            {
+                currentPoise -= (amount / 4);
+            }
+
+            if (currentPoise <= 0)
+            {
+                if (reactList.Count <= 1)
+                {
+                    ReactListRefill();
+                }
+
+                int index = Random.Range(1, reactList.Count - 1);
+                reactType = reactList[index];
+                reactList.RemoveAt(index);
+
+                anim.SetInteger("reactNumber", reactType);
+                anim.SetTrigger("react");
+
+                agent.speed = 0;
+                stunTimer = 1f;
+                currentPoise = poise;
+
+                currentState = State.Stunned;
+            }
+        }      
     }
 
     void Attack()
     {
-        agent.isStopped = true;
+        agent.speed = 0;
         currentState = State.Attacking;
 
-        int move = Random.Range(1, 5);
+        move = Random.Range(1, 5);
 
         anim.SetInteger("attackNumber", move);
-        anim.SetTrigger("attack");
-        print("attack: " + move);
+        anim.SetTrigger("attack");       
+
     }
 
     Vector2 DetermineDir(Vector3 velocityDir)

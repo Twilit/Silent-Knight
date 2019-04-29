@@ -14,16 +14,20 @@ public class EnemyHitbox : MonoBehaviour
 
 	}
 
-    private void OnTriggerStay(Collider other)
+    //Maybe set hitbox inactive after hit to solve multihit problem?
+
+    private void OnTriggerEnter(Collider other)
     {
-        try
+        if (true)
         {
-            other.transform.root.gameObject.GetComponent<Player>().HealthAdjust("damage", 70);
-            print("worked");
-        }
-        catch
-        {
-            print("?");
+            try
+            {
+                other.transform.root.gameObject.GetComponent<Player>().HealthAdjust("damage", 70);
+            }
+            catch
+            {
+                
+            }
         }
     }
 }

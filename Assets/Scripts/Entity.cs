@@ -181,9 +181,4 @@ public class Entity : MonoBehaviour
             }
         }
     }
-
-    public virtual void Death()
-    {
-        gameObject.SetActive(false);
-    }
 }

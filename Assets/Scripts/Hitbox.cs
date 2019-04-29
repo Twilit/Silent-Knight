@@ -121,7 +121,7 @@ public class Hitbox : MonoBehaviour
 
             //Vector3 knockbackVelocity = new Vector3(knockbackDir.x, 0, knockbackDir.z)* knockbackSpeed;
 
-            hitEnemy.GetComponent<Grunt>().HealthAdjust("damage", 20);
+            hitEnemy.GetComponent<Grunt>().HealthAdjust("damage", 120);
         }
         catch
         {
