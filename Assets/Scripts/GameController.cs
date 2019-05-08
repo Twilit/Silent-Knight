@@ -118,6 +118,6 @@ public class GameController : MonoBehaviour
 
     public void ResetLevel()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(0);
     }
 }
